@@ -79,6 +79,36 @@ const incidents = [
     q: "🚨 SSH login failing. What will you check?",
     o: ["chmod 777 /etc/shadow", "systemctl status sshd", "delete users"],
     c: 2
+  },
+  {
+    q: "🚨 System running out of memory. What do you check first?",
+    o: ["free -m", "rm -rf /var", "reboot immediately"],
+    c: 1
+  },
+  {
+    q: "🚨 You want to check which ports are listening. Command?",
+    o: ["df -h", "ss -tuln", "uptime"],
+    c: 2
+  },
+  {
+    q: "🚨 Disk usage is high. How to find large files?",
+    o: ["du -sh /*", "ls -l", "whoami"],
+    c: 1
+  },
+  {
+    q: "🚨 Service does not start on boot. What do you do?",
+    o: ["systemctl enable service", "kill -9 service", "shutdown"],
+    c: 1
+  },
+  {
+    q: "🚨 You want to check system logs. Where do you look?",
+    o: ["/etc/passwd", "/var/log", "/boot"],
+    c: 2
+  },
+  {
+    q: "🚨 Permission denied error on a script. What do you check?",
+    o: ["chmod +x file", "rm file", "reboot server"],
+    c: 1
   }
 ];
 
