@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hack the Machine (Ethical Simulation)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    background: #0d1117;
+    color: #c9d1d9;
+    font-family: monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  #terminal {
+    width: 90%;
+    max-width: 900px;
+    background: #161b22;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 25px rgba(0,255,0,0.25);
+  }
+  #output {
+    height: 400px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    white-space: pre-wrap;
+  }
+  #input {
+    width: 100%;
+    background: black;
+    color: #3fb950;
+    border: none;
+    padding: 10px;
+    font-family: monospace;
+    outline: none;
+  }
+</style>
+</head>
+
+<body>
+<div id="terminal">
+  <div id="output"></div>
+  <input id="input" placeholder="type command and press Enter" autofocus />
+</div>
+
+<script>
+const output = document.getElementById("output");
+const input = document.getElementById("input");
+
+let stage = 0;
+
+const missions = [
+  {
+    hint: "Type `whoami` to identify yourself.",
+    check: cmd => cmd === "whoami",
+    response: "student\n"
+  },
+  {
+    hint: "Find your IP address. (Try: ip a)",
+    check: cmd => cmd === "ip a",
+    response: "inet 192.168.1.10/24\n"
+  },
+  {
+    hint: "Scan open ports on 192.168.1.10",
+    check: cmd => cmd === "nmap 192.168.1.10",
+    response:
+`PORT   STATE SERVICE
+22/tcp open  ssh
+80/tcp open  http`
+  },
+  {
+    hint: "Connect t
