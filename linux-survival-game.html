@@ -5,162 +5,111 @@
 <title>Linux Survival Game</title>
 <style>
   body {
-    background: #000;
+    background-color: #000;
     color: #00ff00;
     font-family: monospace;
-    margin: 0;
     padding: 20px;
   }
   .terminal {
-    max-width: 900px;
+    max-width: 800px;
     margin: auto;
     border: 2px solid #00ff00;
     padding: 15px;
-    min-height: 400px;
   }
-  .line {
-    margin: 5px 0;
-  }
-  .prompt {
-    color: #00ff00;
-  }
-  input {
+  button {
     background: #000;
     color: #00ff00;
-    border: none;
-    outline: none;
+    border: 1px solid #00ff00;
+    padding: 8px 15px;
+    margin: 5px;
+    cursor: pointer;
     font-family: monospace;
-    width: 50px;
+  }
+  button:hover {
+    background: #00ff00;
+    color: #000;
   }
 </style>
 </head>
 <body>
 
-<div class="terminal" id="terminal"></div>
+<div class="terminal">
+  <h2>🛡️ Linux Survival Game</h2>
+  <p id="output">You are a Linux Admin in production.<br>Click START to begin.</p>
+
+  <div id="choices"></div>
+
+  <button onclick="startGame()">START</button>
+</div>
 
 <script>
-const terminal = document.getElementById("terminal");
-
 let score = 0;
 let step = 0;
 
 const incidents = [
   {
-    q: "🚨 Disk is 100% full. What do you do first?",
-    o: ["rm -rf /", "df -h", "shutdown -h now"],
-    c: 2
+    question: "🚨 Disk is 100% full. What do you do first?",
+    options: ["rm -rf /", "df -h", "shutdown -h now"],
+    correct: 1
   },
   {
-    q: "🚨 Apache service is DOWN. Correct command?",
-    o: ["kill -9 httpd", "systemctl restart httpd", "reboot"],
-    c: 2
+    question: "🚨 Apache service is down. Correct command?",
+    options: ["kill -9 httpd", "systemctl restart httpd", "reboot"],
+    correct: 1
   },
   {
-    q: "🚨 CPU usage is very high. First step?",
-    o: ["top", "rm -rf /tmp", "poweroff"],
-    c: 1
+    question: "🚨 CPU usage is very high. First step?",
+    options: ["top", "rm -rf /tmp", "poweroff"],
+    correct: 0
   },
   {
-    q: "🚨 SSH login failing. What will you check?",
-    o: ["chmod 777 /etc/shadow", "systemctl status sshd", "delete users"],
-    c: 2
+    question: "🚨 SSH login failing. What to check?",
+    options: ["chmod 777 /etc/shadow", "systemctl status sshd", "delete users"],
+    correct: 1
   }
 ];
 
-function typeLine(text, delay = 30) {
-  return new Promise(resolve => {
-    let i = 0;
-    const line = document.createElement("div");
-    line.className = "line";
-    terminal.appendChild(line);
-
-    const interval = setInterval(() => {
-      line.textContent += text.charAt(i);
-      i++;
-      if (i >= text.length) {
-        clearInterval(interval);
-        resolve();
-      }
-      terminal.scrollTop = terminal.scrollHeight;
-    }, delay);
-  });
-}
-
-async function startGame() {
-  terminal.innerHTML = "";
+function startGame() {
   score = 0;
   step = 0;
-
-  await typeLine("Welcome to Linux Survival Game");
-  await typeLine("Role: Production Linux Administrator");
-  await typeLine("Type option number and press ENTER");
-  await typeLine("-----------------------------------");
-  nextIncident();
+  showIncident();
 }
 
-async function nextIncident() {
+function showIncident() {
   if (step >= incidents.length) {
-    await typeLine("-----------------------------------");
-    await typeLine(`Game Over | Score: ${score}/${incidents.length}`);
-
-    if (score === incidents.length)
-      await typeLine("🏆 LEGENDARY LINUX ADMIN");
-    else if (score >= 2)
-      await typeLine("👍 Production survived");
-    else
-      await typeLine("⚠️ Production crashed");
-
-    await typeLine("");
-    await typeLine("Refresh page to play again");
+    document.getElementById("output").innerHTML =
+      `🎯 Game Over<br>Your Score: ${score}/${incidents.length}<br><br>` +
+      (score === incidents.length ? "🏆 Legendary Linux Admin!" :
+       score >= 2 ? "👍 Good job! Production survived." :
+       "⚠️ Production crashed. Improve skills.");
+    document.getElementById("choices").innerHTML = "";
     return;
   }
 
-  const i = incidents[step];
-  await typeLine("");
-  await typeLine(i.q);
+  const incident = incidents[step];
+  document.getElementById("output").innerHTML = incident.question;
+  const choicesDiv = document.getElementById("choices");
+  choicesDiv.innerHTML = "";
 
-  for (let x = 0; x < i.o.length; x++) {
-    await typeLine(`${x + 1}) ${i.o[x]}`);
-  }
-
-  showPrompt();
-}
-
-function showPrompt() {
-  const line = document.createElement("div");
-  line.className = "line";
-  line.innerHTML = `<span class="prompt">admin@prod ~$</span> 
-                    <input id="cmd" autofocus />`;
-  terminal.appendChild(line);
-  terminal.scrollTop = terminal.scrollHeight;
-
-  const input = document.getElementById("cmd");
-  input.focus();
-
-  input.addEventListener("keydown", function(e) {
-    if (e.key === "Enter") {
-      const choice = parseInt(input.value);
-      input.disabled = true;
-      checkAnswer(choice);
-    }
+  incident.options.forEach((opt, index) => {
+    const btn = document.createElement("button");
+    btn.textContent = opt;
+    btn.onclick = () => checkAnswer(index);
+    choicesDiv.appendChild(btn);
   });
 }
 
-async function checkAnswer(choice) {
-  const correct = incidents[step].c;
-
-  if (choice === correct) {
+function checkAnswer(choice) {
+  const incident = incidents[step];
+  if (choice === incident.correct) {
     score++;
-    await typeLine("✅ Correct decision");
+    alert("✅ Correct decision!");
   } else {
-    await typeLine("❌ Wrong decision");
+    alert("❌ Wrong choice!");
   }
-
   step++;
-  nextIncident();
+  showIncident();
 }
-
-startGame();
 </script>
 
 </body>
