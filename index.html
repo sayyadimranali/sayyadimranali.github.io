@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Imran Ali | Linux Administrator</title>
+
+  <style>
+    :root{
+      --bg0:#070A10;
+      --bg1:#0b1220;
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.09);
+      --border: rgba(255,255,255,.14);
+      --text: rgba(255,255,255,.86);
+      --muted: rgba(255,255,255,.62);
+      --accent:#6EE7FF;
+      --accent2:#A78BFA;
+      --good:#2ee59d;
+      --shadow: 0 25px 70px rgba(0,0,0,.55);
+      --shadow2: 0 15px 40px rgba(0,0,0,.45);
+      --radius: 18px;
+      --radius2: 26px;
+      --max: 1120px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 800px at 15% 10%, rgba(167,139,250,.22), transparent 55%),
+        radial-gradient(900px 600px at 85% 20%, rgba(110,231,255,.18), transparent 52%),
+        radial-gradient(900px 700px at 55% 90%, rgba(46,229,157,.12), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 65%, #05060a);
+      overflow-x:hidden;
+    }
+
+    /* Background canvas (particles) */
+    canvas#fx{
+      position:fixed;
+      inset:0;
+      z-index:-2;
+      width:100%;
+      height:100%;
+      pointer-events:none;
+      opacity:.9;
+      filter: saturate(1.2);
+    }
+
+    /* Soft grain overlay (realistic texture) */
+    .grain{
+      position:fixed;
+      inset:-40%;
+      z-index:-1;
+      pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      transform: rotate(8deg);
+      opacity:.12;
+      mix-blend-mode: overlay;
+    }
+
+    /* Sticky nav */
+    .nav{
+      position:sticky;
+      top:0;
+      z-index:50;
+      backdrop-filter: blur(14px);
+      background: linear-gradient(180deg, rgba(10,12,18,.78), rgba(10,12,18,.35));
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+    .nav-inner{
+      max-width:var(--max);
+      margin:0 auto;
+      padding: 14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      user-select:none;
+    }
+    .logo{
+      width:36px;height:36px;
+      border-radius: 12px;
+      background: radial-gradient(circle at 30% 30%, rgba(110,231,255,.95), rgba(167,139,250,.75), rgba(46,229,157,.35));
+      box-shadow: 0 10px 30px rgba(110,231,255,.18);
+      border:1px solid rgba(255,255,255,.16);
+    }
+    .brand b{letter-spacing:.3px}
+    .brand small{display:block;color:var(--muted);font-size:12px;margin-top:1px}
+
+    .nav a{
+      color: rgba(255,255,255,.82);
+      text-decoration:none;
+      font-weight: 600;
+      font-size: 13px;
+      padding: 9px 10px;
+      border-radius: 12px;
+      transition: transform .25s ease, background .25s ease, color .25s ease;
+    }
+    .nav a:hover{
+      background: rgba(255,255,255,.08);
+      transform: translateY(-1px);
+      color: white;
+    }
+    .nav .links{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+
+    /* Container */
+    .wrap{
+      max-width:var(--max);
+      margin:0 auto;
+      padding: 0 18px 70px;
+    }
+
+    /* Hero */
+    header.hero{
+      padding: 64px 0 24px;
+      position:relative;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.35fr .9fr;
+      gap: 22px;
+      align-items:stretch;
+    }
+    @media (max-width: 920px){
+      .hero-grid{grid-template-columns:1fr;gap:14px}
+    }
+
+    .hero-card{
+      position:relative;
+      border-radius: var(--radius2);
+      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      transform-style:preserve-3d;
+    }
+    .hero-card::before{
+      content:"";
+      position:absolute;inset:-1px;
+      background: radial-gradient(900px 300px at 20% 0%, rgba(110,231,255,.20), transparent 55%),
+                  radial-gradient(900px 260px at 90% 20%, rgba(167,139,250,.18), transparent 52%),
+                  radial-gradient(700px 260px at 60% 100%, rgba(46,229,157,.12), transparent 55%);
+      opacity:.95;
+      pointer-events:none;
+    }
+    .hero-card::after{
+      content:"";
+      position:absolute;inset:-2px;
+      background: linear-gradient(115deg, transparent 0%, rgba(255,255,255,.14) 35%, transparent 70%);
+      transform: translateX(-60%) rotate(10deg);
+      opacity:.0;
+      transition: opacity .35s ease, transform .65s ease;
+      pointer-events:none;
+    }
+    .hero-card:hover::after{
+      opacity:.7;
+      transform: translateX(35%) rotate(10deg);
+    }
+
+    .hero-inner{
+      position:relative;
+      padding: 34px 28px;
+    }
+    @media (max-width: 520px){
+      .hero-inner{padding: 26px 18px}
+    }
+
+    .kicker{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      color: rgba(255,255,255,.78);
+      font-weight:700;
+      font-size: 12px;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(10px);
+    }
+    .dot{
+      width:10px;height:10px;border-radius:999px;
+      background: var(--good);
+      box-shadow: 0 0 18px rgba(46,229,157,.55);
+    }
+
+    h1{
+      margin: 14px 0 8px;
+      font-size: clamp(34px, 4vw, 54px);
+      line-height: 1.05;
+      letter-spacing: -1px;
+    }
+    .subtitle{
+      margin:0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.7;
+      max-width: 64ch;
+    }
+
+    .cta{
+      margin-top: 18px;
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+      align-items:center;
+    }
+
+    /* Magnetic glow button */
+    .btn{
+      position:relative;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 12px 16px;
+      border-radius: 14px;
+      text-decoration:none;
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing:.2px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.90);
+      box-shadow: var(--shadow2);
+      transform: translateZ(0);
+      transition: transform .22s ease, background .22s ease, border-color .22s ease;
+      overflow:hidden;
+    }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(110,231,255,.22), rgba(167,139,250,.18));
+      border-color: rgba(110,231,255,.28);
+    }
+    .btn .shine{
+      position:absolute;
+      inset:-40px -80px auto auto;
+      width:180px;height:180px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.45), transparent 55%);
+      opacity:0;
+      transform: translate3d(0,0,0);
+      transition: opacity .25s ease;
+      pointer-events:none;
+    }
+    .btn:hover{
+      transform: translateY(-2px) scale(1.01);
+      background: rgba(255,255,255,.085);
+      border-color: rgba(255,255,255,.22);
+    }
+    .btn:hover .shine{opacity:.75}
+    .btn:active{transform: translateY(0px) scale(.99)}
+
+    .stat-card{
+      border-radius: var(--radius2);
+      border: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+      position:relative;
+      transform-style:preserve-3d;
+    }
+    .stat-inner{
+      padding: 20px 18px;
+      display:grid;
+      gap: 12px;
+    }
+    .mini{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .pill{
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+    }
+    .pill b{display:block;font-size:13px}
+    .pill span{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width: 42px;height:42px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: radial-gradient(circle at 30% 30%, rgba(110,231,255,.22), rgba(167,139,250,.12), rgba(255,255,255,.03));
+      box-shadow: 0 12px 30px rgba(167,139,250,.12);
+    }
+
+    /* Sections */
+    section{
+      margin-top: 30px;
+    }
+    .section-title{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap: 14px;
+      margin: 30px 0 14px;
+    }
+    .section-title h2{
+      margin:0;
+      font-size: 18px;
+      letter-spacing:.2px;
+    }
+    .section-title p{
+      margin:0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* Grid cards */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+    }
+    .col-6{grid-column: span 6}
+    .col-12{grid-column: span 12}
+    @media (max-width: 920px){
+      .col-6{grid-column: span 12}
+    }
+
+    .card{
+      position:relative;
+      padding: 18px 18px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+      transform-style: preserve-3d;
+      transition: transform .25s ease, border-color .25s ease, background .25s ease;
+    }
+    .card::before{
+      content:"";
+      position:absolute;inset:-1px;
+      background:
+        radial-gradient(420px 180px at 15% 0%, rgba(110,231,255,.16), transparent 60%),
+        radial-gradient(440px 190px at 95% 15%, rgba(167,139,250,.14), transparent 62%);
+      opacity:.9;
+      pointer-events:none;
+    }
+    .card:hover{
+      border-color: rgba(255,255,255,.20);
+      background: linear-gradient(180deg, rgba(255,255,255,.085), rgba(255,255,255,.035));
+    }
+    .card h3{
+      margin: 2px 0 8px;
+      font-size: 16px;
+      letter-spacing: .1px;
+    }
+    .card p{
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    /* Skills chips */
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .chip{
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      color: rgba(255,255,255,.82);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: .2px;
+      transition: transform .2s ease, border-color .2s ease;
+      transform: translateZ(0);
+    }
+    .chip:hover{
+      transform: translateY(-2px);
+      border-color: rgba(110,231,255,.32);
+    }
+
+    /* Links list */
+    .links-list{
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: rgba(255,255,255,.82);
+    }
+    .links-list a{
+      color: rgba(110,231,255,.88);
+      text-decoration:none;
+      font-weight: 700;
+    }
+    .links-list a:hover{text-decoration:underline}
+
+    /* Reveal on scroll */
+    .reveal{
+      opacity:0;
+      transform: translateY(12px) scale(.99);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.show{
+      opacity:1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Footer */
+    footer{
+      margin-top: 44px;
+      padding: 18px 0 0;
+      color: rgba(255,255,255,.55);
+      text-align:center;
+      font-size: 13px;
+    }
+
+    /* Tiny helpers */
+    .row{
+      display:flex; gap: 10px; flex-wrap:wrap;
+      margin-top: 10px;
+    }
+    .muted{color:var(--muted)}
+    .divider{
+      height:1px;
+      background: rgba(255,255,255,.10);
+      margin: 12px 0;
+    }
+
+    /* Reduced motion accessibility */
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none !important; transition:none !important}
+      canvas#fx{display:none}
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="fx" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <b>Imran Ali</b>
+          <small>Linux Administrator • DevOps • Automation</small>
+        </div>
+      </div>
+      <div class="links">
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#games">Games</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="wrap">
+    <header class="hero" id="top">
+      <div class="hero-grid">
+        <div class="hero-card tilt reveal" data-tilt>
+          <div class="hero-inner">
+            <div class="kicker"><span class="dot"></span> Available for roles • Maharashtra, India</div>
+            <h1>Imran Ali</h1>
+            <p class="subtitle">
+              Linux Administrator who loves <b>production-grade reliability</b>, <b>automation</b>, and
+              <b>DevOps engineering</b>. I build practical tools and learn by experimenting.
+            </p>
+
+            <div class="cta">
+              <a class="btn primary magnetic" href="#projects">
+                <span>🚀 View Projects</span>
+                <span class="shine" aria-hidden="true"></span>
+              </a>
+              <a class="btn magnetic" href="mailto:sayyadimranali32@gmail.com">
+                <span>📧 Email Me</span>
+                <span class="shine" aria-hidden="true"></span>
+              </a>
+              <a class="btn magnetic" href="https://github.com/sayyadimranali" target="_blank" rel="noreferrer">
+                <span>💻 GitHub</span>
+                <span class="shine" aria-hidden="true"></span>
+              </a>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="row">
+              <span class="muted">Focus:</span>
+              <span class="chip">RHEL / Ubuntu / SUSE</span>
+              <span class="chip">Automation</span>
+              <span class="chip">Containers</span>
+              <span class="chip">Infra Reliability</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="stat-card tilt reveal" data-tilt>
+          <div class="stat-inner">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+              <div>
+                <b style="font-size:14px;">What I bring</b>
+                <div class="muted" style="font-size:12px;margin-top:3px;">Production mindset + calm incident handling</div>
+              </div>
+              <div class="badge" aria-hidden="true">🐧</div>
+            </div>
+
+            <div class="mini">
+              <div class="pill">
+                <b>System Admin</b>
+                <span>Hardening • Services • Monitoring</span>
+              </div>
+              <div class="pill">
+                <b>Automation</b>
+                <span>Bash • Repeatable ops</span>
+              </div>
+              <div class="pill">
+                <b>DevOps</b>
+                <span>Docker • CI basics</span>
+              </div>
+              <div class="pill">
+                <b>Cloud</b>
+                <span>AWS • GCP • DO</span>
+              </div>
+            </div>
+
+            <a class="btn primary magnetic" href="#games">
+              <span>🎮 Try Interactive Games</span>
+              <span class="shine" aria-hidden="true"></span>
+            </a>
+          </div>
+        </aside>
+      </div>
+    </header>
+
+    <!-- ABOUT -->
+    <section id="about" class="reveal">
+      <div class="section-title">
+        <h2>👨‍💻 About Me</h2>
+        <p>Clean ops • Secure systems • Fast troubleshooting</p>
+      </div>
+
+      <div class="grid">
+        <div class="card tilt col-12" data-tilt>
+          <h3>Production-first Linux Administrator</h3>
+          <p>
+            I manage production servers, troubleshoot incidents, automate repetitive tasks,
+            and maintain secure, reliable systems. I enjoy building practical tools and
+            learning through experimentation.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="reveal">
+      <div class="section-title">
+        <h2>🛠️ Skills</h2>
+        <p>Chips are interactive (hover)</p>
+      </div>
+
+      <div class="card tilt" data-tilt>
+        <div class="chips">
+          <span class="chip">Linux (RHEL / CentOS / Ubuntu / SUSE)</span>
+          <span class="chip">Shell Scripting (Bash)</span>
+          <span class="chip">System Administration</span>
+          <span class="chip">Troubleshooting</span>
+          <span class="chip">Networking</span>
+          <span class="chip">Docker</span>
+          <span class="chip">Puppet</span>
+          <span class="chip">Ansible</span>
+          <span class="chip">Kubernetes</span>
+          <span class="chip">Firewall (Sophos)</span>
+          <span class="chip">Cloud (AWS, GCP, DO)</span>
+          <span class="chip">Git & GitHub</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- GAMES -->
+    <section id="games" class="reveal">
+      <div class="section-title">
+        <h2>🎮 Interactive Terminal Games</h2>
+        <p>3D cards • smooth interactions</p>
+      </div>
+
+      <div class="grid">
+        <div class="card tilt col-6" data-tilt>
+          <h3>Linux Survival Game</h3>
+          <p>
+            A terminal-style interactive game inspired by real Linux production incidents.
+            Players choose the correct Linux command to keep production running.
+          </p>
+          <p class="muted"><b>Tech:</b> Bash (logic), JavaScript, HTML, CSS</p>
+          <div class="row">
+            <a class="btn primary magnetic" href="linux-survival-game.html">
+              <span>▶️ Play Linux Survival Game</span>
+              <span class="shine" aria-hidden="true"></span>
+            </a>
+          </div>
+        </div>
+
+        <div class="card tilt col-6" data-tilt>
+          <h3>Hack the Machine (Interactive Simulation)</h3>
+          <p>
+            A terminal-style, educational hacking simulation designed to demonstrate
+            ethical hacking concepts in a safe and fictional environment.
+          </p>
+          <p class="muted">
+            <b>Skills:</b> Linux Security, Bash Logic, Ethical Hacking, Problem-Solving, Awareness
+          </p>
+          <p class="muted"><b>Tech:</b> JavaScript, HTML, CSS</p>
+          <div class="row">
+            <a class="btn primary magnetic" href="hack-the-machine.html">
+              <span>💻 Hack the Machine</span>
+              <span class="shine" aria-hidden="true"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="reveal">
+      <div class="section-title">
+        <h2>📂 Projects</h2>
+        <p>Curated + beautiful layout</p>
+      </div>
+
+      <div class="grid">
+        <div class="card tilt col-12" data-tilt>
+          <h3>🔧 Automation Scripts</h3>
+          <p>
+            Collection of real-world Bash automation scripts used for system monitoring,
+            cleanup, backups, service health checks, and security auditing.
+          </p>
+
+          <ul class="links-list">
+            <li>📊 <a href="https://sayyadimranali.github.io/disk_monitor.txt" target="_blank" rel="noreferrer">Disk Usage Monitor</a></li>
+            <li>🧹 <a href="https://sayyadimranali.github.io/log_cleanup.txt" target="_blank" rel="noreferrer">Log Cleanup Script</a></li>
+            <li>💾 <a href="https://sayyadimranali.github.io/backup.txt" target="_blank" rel="noreferrer">Backup Automation</a></li>
+            <li>🔄 <a href="https://sayyadimranali.github.io/service_monitor.txt" target="_blank" rel="noreferrer">Service Health Monitor</a></li>
+            <li>📈 <a href="https://sayyadimranali.github.io/resource_monitor.txt" target="_blank" rel="noreferrer">Resource Monitor</a></li>
+            <li>🔐 <a href="https://sayyadimranali.github.io/user_audit.txt" target="_blank" rel="noreferrer">User Security Audit</a></li>
+            <li>🚨 <a href="https://sayyadimranali.github.io/ssh_alert.txt" target="_blank" rel="noreferrer">SSH Brute-Force Alert</a></li>
+          </ul>
+        </div>
+
+        <div class="card tilt col-12" data-tilt>
+          <h3>🧪 Linux Practice Labs</h3>
+          <p>
+            Hands-on lab setups covering Linux services, security hardening,
+            troubleshooting, and real-world production scenarios.
+          </p>
+          <div class="row">
+            <span class="chip">Services</span>
+            <span class="chip">Hardening</span>
+            <span class="chip">Incident Simulation</span>
+            <span class="chip">Troubleshooting</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="reveal">
+      <div class="section-title">
+        <h2>📬 Contact</h2>
+        <p>Let’s connect</p>
+      </div>
+
+      <div class="grid">
+        <div class="card tilt col-12" data-tilt>
+          <p>📧 <b>Email:</b> <a href="mailto:sayyadimranali32@gmail.com" style="color:rgba(110,231,255,.92);font-weight:800;text-decoration:none;">sayyadimranali32@gmail.com</a></p>
+          <p>📍 <b>Location:</b> Maharashtra, India</p>
+          <p>🔗 <b>LinkedIn:</b> <a href="https://www.linkedin.com/in/imranali-i9" target="_blank" rel="noreferrer" style="color:rgba(110,231,255,.92);font-weight:800;text-decoration:none;">www.linkedin.com/in/imranali-i9</a></p>
+          <p>💻 <b>GitHub:</b> <a href="https://github.com/sayyadimranali" target="_blank" rel="noreferrer" style="color:rgba(110,231,255,.92);font-weight:800;text-decoration:none;">github.com/sayyadimranali</a></p>
+
+          <div class="divider"></div>
+
+          <div class="row">
+            <a class="btn primary magnetic" href="mailto:sayyadimranali32@gmail.com">
+              <span>✉️ Send Email</span>
+              <span class="shine" aria-hidden="true"></span>
+            </a>
+            <a class="btn magnetic" href="#top">
+              <span>⬆️ Back to Top</span>
+              <span class="shine" aria-hidden="true"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      © 2025 Imran Ali | Built with Linux mindset 🐧
+    </footer>
+  </div>
+
+  <script>
+    // ---------- Particles / Aurora-ish background ----------
+    const canvas = document.getElementById('fx');
+    const ctx = canvas.getContext('2d', { alpha: true });
+
+    let W, H, DPR;
+    function resize(){
+      DPR = Math.min(2, window.devicePixelRatio || 1);
+      W = canvas.width = Math.floor(innerWidth * DPR);
+      H = canvas.height = Math.floor(innerHeight * DPR);
+      canvas.style.width = innerWidth + 'px';
+      canvas.style.height = innerHeight + 'px';
+    }
+    window.addEventListener('resize', resize, { passive:true });
+    resize();
+
+    const rand = (a,b)=>a+Math.random()*(b-a);
+
+    const dots = [];
+    const DOTS = 85;
+    for(let i=0;i<DOTS;i++){
+      dots.push({
+        x: rand(0, W),
+        y: rand(0, H),
+        r: rand(1.2, 3.2) * DPR,
+        vx: rand(-0.25, 0.25) * DPR,
+        vy: rand(-0.20, 0.20) * DPR,
+        a: rand(0.18, 0.55)
+      });
+    }
+
+    let t = 0;
+    function draw(){
+      t += 0.004;
+
+      ctx.clearRect(0,0,W,H);
+
+      // soft moving glow blobs
+      const g1x = (0.2 + 0.08*Math.sin(t*2.3)) * W;
+      const g1y = (0.18 + 0.06*Math.cos(t*1.9)) * H;
+      const g2x = (0.82 + 0.06*Math.cos(t*2.0)) * W;
+      const g2y = (0.25 + 0.08*Math.sin(t*2.1)) * H;
+
+      const grad1 = ctx.createRadialGradient(g1x,g1y, 0, g1x,g1y, 520*DPR);
+      grad1.addColorStop(0, 'rgba(110,231,255,0.16)');
+      grad1.addColorStop(1, 'rgba(110,231,255,0)');
+      ctx.fillStyle = grad1;
+      ctx.fillRect(0,0,W,H);
+
+      const grad2 = ctx.createRadialGradient(g2x,g2y, 0, g2x,g2y, 560*DPR);
+      grad2.addColorStop(0, 'rgba(167,139,250,0.14)');
+      grad2.addColorStop(1, 'rgba(167,139,250,0)');
+      ctx.fillStyle = grad2;
+      ctx.fillRect(0,0,W,H);
+
+      // particles + links
+      for(const p of dots){
+        p.x += p.vx; p.y += p.vy;
+        if(p.x < -50) p.x = W+50;
+        if(p.x > W+50) p.x = -50;
+        if(p.y < -50) p.y = H+50;
+        if(p.y > H+50) p.y = -50;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(255,255,255,${p.a})`;
+        ctx.fill();
+      }
+
+      // lines
+      for(let i=0;i<dots.length;i++){
+        for(let j=i+1;j<dots.length;j++){
+          const a = dots[i], b = dots[j];
+          const dx = a.x-b.x, dy = a.y-b.y;
+          const d = Math.sqrt(dx*dx + dy*dy);
+          if(d < 140*DPR){
+            const alpha = (1 - d/(140*DPR)) * 0.10;
+            ctx.strokeStyle = `rgba(110,231,255,${alpha})`;
+            ctx.beginPath();
+            ctx.moveTo(a.x,a.y);
+            ctx.lineTo(b.x,b.y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(draw);
+    }
+    draw();
+
+    // ---------- 3D tilt cards (realistic) ----------
+    const tiltEls = document.querySelectorAll('[data-tilt]');
+    tiltEls.forEach(el=>{
+      el.addEventListener('mousemove', (e)=>{
+        const r = el.getBoundingClientRect();
+        const cx = r.left + r.width/2;
+        const cy = r.top + r.height/2;
+        const dx = (e.clientX - cx) / (r.width/2);
+        const dy = (e.clientY - cy) / (r.height/2);
+        const rx = (-dy * 7).toFixed(2);
+        const ry = ( dx * 10).toFixed(2);
+        el.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-2px)`;
+      }, { passive:true });
+
+      el.addEventListener('mouseleave', ()=>{
+        el.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+      });
+    });
+
+    // ---------- Magnetic buttons ----------
+    const magnets = document.querySelectorAll('.magnetic');
+    magnets.forEach(btn=>{
+      btn.addEventListener('mousemove', (e)=>{
+        const r = btn.getBoundingClientRect();
+        const x = e.clientX - (r.left + r.width/2);
+        const y = e.clientY - (r.top + r.height/2);
+        btn.style.transform = `translate(${x*0.07}px, ${y*0.10}px) translateY(-2px)`;
+      }, { passive:true });
+      btn.addEventListener('mouseleave', ()=>{
+        btn.style.transform = '';
+      });
+    });
+
+    // ---------- Reveal on scroll ----------
+    const reveals = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(en=>{
+        if(en.isIntersecting) en.target.classList.add('show');
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el=>io.observe(el));
+
+    // Smooth anchor scroll for older browsers (native supported in modern ones)
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        const id = a.getAttribute('href');
+        const target = document.querySelector(id);
+        if(target){
+          e.preventDefault();
+          target.scrollIntoView({ behavior:'smooth', block:'start' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
