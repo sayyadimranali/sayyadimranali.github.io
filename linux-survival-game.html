@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Linux Survival Game</title>
+<style>
+  body {
+    background-color: #000;
+    color: #00ff00;
+    font-family: monospace;
+    padding: 20px;
+  }
+  .terminal {
+    max-width: 800px;
+    margin: auto;
+    border: 2px solid #00ff00;
+    padding: 15px;
+  }
+  button {
+    background: #000;
+    color: #00ff00;
+    border: 1px solid #00ff00;
+    padding: 8px 15px;
+    margin: 5px;
+    cursor: pointer;
+    font-family: monospace;
+  }
+  button:hover {
+    background: #00ff00;
+    color: #000;
+  }
+</style>
+</head>
+<body>
+
+<div class="terminal">
+  <h2>🛡️ Linux Survival Game</h2>
+  <p id="output">You are a Linux Admin in production.<br>Click START to begin.</p>
+
+  <div id="choices"></div>
+
+  <button onclick="startGame()">START</button>
+</div>
+
+<script>
+let score = 0;
+let step = 0;
+
+const incidents = [
+  {
+    question: "🚨 Disk is 100% full. What do you do first?",
+    options: ["rm -rf /", "df -h", "shutdown -h now"],
+    correct: 1
+  },
+  {
+    question: "🚨 Apache service is down. Correct command?",
+    options: ["kill -9 httpd", "systemctl restart httpd", "reboot"],
+    correct: 1
+  },
+  {
+    question: "🚨 CPU usage is very high. First step?",
+    options: ["top", "rm -rf /tmp", "poweroff"],
+    correct: 0
+  },
+  {
+    question: "🚨 SSH login failing. What to check?",
+    options: ["chmod 777 /etc/shadow", "systemctl status sshd", "delete users"],
+    correct: 1
+  }
+];
+
+function startGame() {
+  score = 0;
+  step = 0;
+  showIncident();
+}
+
+function showIncident() {
+  if (step >= incidents.length) {
+    document.getElementById("output").innerHTML =
+      `🎯 Game Over<br>Your Score: ${score}/${incidents.length}<br><br>` +
+      (score === incidents.length ? "🏆 Legendary Linux Admin!" :
+       score >= 2 ? "👍 Good job! Production survived." :
+       "⚠️ Production crashed. Improve skills.");
+    document.getElementById("choices").innerHTML = "";
+    return;
+  }
+
+  const incident = incidents[step];
+  document.getElementById("output").innerHTML = incident.question;
+  const choicesDiv = document.getElementById("choices");
+  choicesDiv.innerHTML = "";
+
+  incident.options.forEach((opt, index) => {
+    const btn = document.createElement("button");
+    btn.textContent = opt;
+    btn.onclick = () => checkAnswer(index);
+    choicesDiv.appendChild(btn);
+  });
+}
+
+function checkAnswer(choice) {
+  const incident = incidents[step];
+  if (choice === incident.correct) {
+    score++;
+    alert("✅ Correct decision!");
+  } else {
+    alert("❌ Wrong choice!");
+  }
+  step++;
+  showIncident();
+}
+</script>
+
+</body>
+</html>
