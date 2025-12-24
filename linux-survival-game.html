@@ -3,61 +3,54 @@
 <head>
 <meta charset="UTF-8">
 <title>Linux Survival Game</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
   body {
-    background: #000;
-    color: #00ff00;
+    background: #0d1117;
+    color: #c9d1d9;
     font-family: monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
     margin: 0;
-    padding: 20px;
   }
-  .terminal {
-    max-width: 900px;
-    margin: auto;
-    border: 2px solid #00ff00;
+  #terminal {
+    width: 90%;
+    max-width: 800px;
+    background: #161b22;
+    border-radius: 8px;
     padding: 20px;
-    min-height: 400px;
+    box-shadow: 0 0 20px rgba(0,255,0,0.15);
   }
   .line {
-    margin: 6px 0;
-  }
-  .prompt {
-    color: #00ff00;
-  }
-  input {
-    background: #000;
-    color: #00ff00;
-    border: none;
-    outline: none;
-    font-family: monospace;
-    width: 60px;
+    margin-bottom: 10px;
   }
   button {
-    background: #000;
-    color: #00ff00;
-    border: 1px solid #00ff00;
-    padding: 10px 20px;
-    cursor: pointer;
+    background: #238636;
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    margin: 5px 0;
     font-family: monospace;
-    margin-top: 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    display: block;
   }
   button:hover {
-    background: #00ff00;
-    color: #000;
+    background: #2ea043;
   }
 </style>
-
 </head>
-<body>
 
-<div class="terminal" id="terminal"></div>
+<body>
+<div id="terminal"></div>
 
 <script>
 const terminal = document.getElementById("terminal");
 
-let score = 0;
 let step = 0;
+let score = 0;
 
 const incidents = [
   {
@@ -125,77 +118,66 @@ function printLine(text) {
 
 function showQuestion() {
   clearScreen();
-
-  const i = incidents[step];
-
-  printLine("Linux Survival Game");
-  printLine("-----------------------------");
-  printLine(i.q);
+  printLine(`🧠 Linux Survival Game (Question ${step + 1}/${incidents.length})`);
   printLine("");
+  printLine(incidents[step].q);
+  printLine("Please select the correct answer:");
 
-  i.o.forEach((opt, idx) => {
-    printLine(`${idx + 1}) ${opt}`);
-  });
-
-  printLine("");
-  printLine("👉 Please select the correct answer (1/2/3 and press Enter)");
-  printPrompt();
-}
-
-function printPrompt() {
-  const div = document.createElement("div");
-  div.className = "line";
-  div.innerHTML = `<span class="prompt">admin@prod ~$</span> <input id="cmd" autofocus>`;
-  terminal.appendChild(div);
-
-  const input = document.getElementById("cmd");
-  input.focus();
-
-  input.addEventListener("keydown", function (e) {
-    if (e.key === "Enter") {
-      const choice = parseInt(input.value);
-      handleAnswer(choice);
-    }
+  incidents[step].o.forEach((opt, index) => {
+    const btn = document.createElement("button");
+    btn.textContent = `${index + 1}. ${opt}`;
+    btn.onclick = () => handleAnswer(index + 1);
+    terminal.appendChild(btn);
   });
 }
 
 function handleAnswer(choice) {
-  if (choice === incidents[step].c) {
+  clearScreen();
+
+  const correctIndex = incidents[step].c;
+  const correctAnswer = incidents[step].o[correctIndex - 1];
+
+  if (choice === correctIndex) {
     score++;
+    printLine("✅ Correct answer");
+  } else {
+    printLine("❌ Wrong answer");
+    printLine(`✅ Correct answer: ${correctAnswer}`);
   }
 
   step++;
 
-  if (step < incidents.length) {
-    setTimeout(showQuestion, 300);
-  } else {
-    showResult();
-  }
+  setTimeout(() => {
+    if (step < incidents.length) {
+      showQuestion();
+    } else {
+      showResult();
+    }
+  }, 1200);
 }
 
 function showResult() {
   clearScreen();
-
-  printLine("🎯 Game Over");
-  printLine("-----------------------------");
+  printLine("🎯 Game Completed!");
   printLine(`Your Score: ${score} / ${incidents.length}`);
   printLine("");
 
-  if (score === incidents.length) {
-    printLine("🏆 Legendary Linux Admin!");
-  } else if (score >= 2) {
-    printLine("👍 Good job! Production survived.");
-  } else {
-    printLine("⚠️ Production crashed. Improve skills.");
-  }
+  const retryBtn = document.createElement("button");
+  retryBtn.textContent = "🔁 Retry Game";
+  retryBtn.onclick = () => {
+    step = 0;
+    score = 0;
+    showQuestion();
+  };
 
-  const btn = document.createElement("button");
-  btn.textContent = "⬅ EXIT TO PORTFOLIO";
-  btn.onclick = () => {
+  const exitBtn = document.createElement("button");
+  exitBtn.textContent = "⬅ Exit to Portfolio";
+  exitBtn.onclick = () => {
     window.location.href = "index.html";
   };
 
-  terminal.appendChild(btn);
+  terminal.appendChild(retryBtn);
+  terminal.appendChild(exitBtn);
 }
 
 // Start game
