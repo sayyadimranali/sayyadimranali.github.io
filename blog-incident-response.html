@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Incident Response on Linux: A Practical Checklist | Imran Ali</title>
+  <meta name="description" content="A practical, step-by-step incident response checklist for Linux: triage, containment, forensics, recovery, and post-incident actions with safe command examples." />
+
+  <style>
+    :root{
+      --bg:#070A10;
+      --panel: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.14);
+      --text: rgba(255,255,255,.90);
+      --muted: rgba(255,255,255,.62);
+      --accent:#6EE7FF;
+      --accent2:#A78BFA;
+      --good:#2ee59d;
+      --warn:#ffcc66;
+      --bad:#ff6b6b;
+      --radius: 18px;
+      --shadow: 0 18px 55px rgba(0,0,0,.52);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 800px at 15% 10%, rgba(167,139,250,.20), transparent 55%),
+        radial-gradient(900px 600px at 85% 20%, rgba(110,231,255,.18), transparent 52%),
+        radial-gradient(900px 700px at 55% 90%, rgba(46,229,157,.12), transparent 55%),
+        linear-gradient(180deg, var(--bg), #0b1220 65%, rgba(0,0,0,.65));
+      overflow-x:hidden;
+    }
+    a{color:var(--accent); text-decoration:none; font-weight:900}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:1180px;margin:0 auto;padding:18px 18px 80px}
+
+    /* Top nav */
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      margin: 10px 0 16px;
+    }
+    .brand{display:flex; align-items:center; gap:10px}
+    .logo{
+      width:40px;height:40px;border-radius:16px;
+      background: radial-gradient(circle at 30% 30%, rgba(110,231,255,.95), rgba(167,139,250,.70), rgba(46,229,157,.35));
+      border:1px solid var(--border);
+      box-shadow: 0 12px 35px rgba(110,231,255,.15);
+    }
+    .brand b{display:block; letter-spacing:.2px}
+    .brand small{display:block;color:var(--muted); margin-top:2px}
+
+    .btn{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-weight: 950;
+      cursor:pointer;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+      display:inline-flex; align-items:center; gap:8px;
+      user-select:none;
+      text-decoration:none;
+    }
+    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.10); border-color: rgba(110,231,255,.22); text-decoration:none}
+    .btn.primary{
+      border-color: rgba(110,231,255,.35);
+      background: linear-gradient(135deg, rgba(110,231,255,.16), rgba(167,139,250,.12));
+    }
+
+    /* Progress bar */
+    .progress{
+      position:fixed; top:0; left:0; right:0; height:4px;
+      background: rgba(255,255,255,.08);
+      z-index:9999;
+    }
+    .progress > div{
+      height:100%; width:0%;
+      background: linear-gradient(90deg, rgba(110,231,255,.9), rgba(167,139,250,.85), rgba(46,229,157,.8));
+    }
+
+    /* Layout */
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 320px;
+      gap:14px;
+      align-items:start;
+    }
+    @media (max-width: 1050px){
+      .grid{grid-template-columns:1fr}
+      .sticky{position:relative !important; top:auto !important}
+    }
+
+    .card{
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .hd{
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: linear-gradient(135deg, rgba(110,231,255,.12), rgba(167,139,250,.10));
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    .hd h2{margin:0;font-size:14px;letter-spacing:.2px}
+    .bd{padding:16px}
+
+    .hero h1{
+      margin: 2px 0 8px;
+      font-size: 34px;
+      letter-spacing:.2px;
+      line-height:1.2;
+    }
+    .meta{
+      display:flex; flex-wrap:wrap; gap:8px;
+      color: var(--muted);
+      font-weight: 850;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+    .pill{
+      font-size: 11px;
+      font-weight: 950;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      color: rgba(255,255,255,.84);
+      white-space:nowrap;
+    }
+    .pill.good{border-color: rgba(46,229,157,.35); background: rgba(46,229,157,.08)}
+    .pill.warn{border-color: rgba(255,204,102,.35); background: rgba(255,204,102,.08)}
+
+    /* Content */
+    .content{
+      color: rgba(255,255,255,.84);
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    .content h2{
+      margin: 26px 0 10px;
+      font-size: 18px;
+      color: rgba(255,255,255,.94);
+    }
+    .content h3{
+      margin: 18px 0 8px;
+      font-size: 16px;
+      color: rgba(255,255,255,.92);
+    }
+    .content ul{margin:8px 0 14px; padding-left: 18px}
+    .content li{margin:6px 0}
+    .callout{
+      margin: 14px 0;
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+    }
+    .callout b{color: rgba(255,255,255,.92)}
+    .warnBox{border-color: rgba(255,204,102,.30); background: rgba(255,204,102,.08)}
+    .goodBox{border-color: rgba(46,229,157,.30); background: rgba(46,229,157,.08)}
+
+    pre{
+      margin: 12px 0;
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.35);
+      overflow:auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+      position: relative;
+    }
+    code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      color: rgba(255,255,255,.86);
+    }
+    .copyBtn{
+      position:absolute;
+      top:10px; right:10px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.88);
+      cursor:pointer;
+      font-weight: 950;
+      font-size: 12px;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+    }
+    .copyBtn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.10);
+      border-color: rgba(110,231,255,.25);
+    }
+    .small{font-size:12px; color: var(--muted); font-weight: 850}
+
+    /* Right TOC */
+    .sticky{position:sticky; top:14px}
+    .toc a{
+      display:block;
+      padding: 9px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      margin: 8px 0;
+      color: rgba(255,255,255,.82);
+      font-weight: 900;
+    }
+    .toc a:hover{border-color: rgba(110,231,255,.22); background: rgba(255,255,255,.06); text-decoration:none}
+    .toc a.active{border-color: rgba(110,231,255,.40); background: rgba(110,231,255,.08)}
+    .note{
+      margin-top: 12px;
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.72);
+      font-weight: 850;
+      font-size: 12px;
+      line-height:1.6;
+    }
+
+    /* Footer */
+    footer{
+      margin-top: 18px;
+      text-align:center;
+      color: var(--muted);
+      font-weight: 850;
+      font-size: 12px;
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto !important; transition:none !important}
+    }
+    html{scroll-behavior:smooth}
+  </style>
+</head>
+<body>
+
+<div class="progress"><div id="pbar"></div></div>
+
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <b>Imran Ali • Blog</b>
+        <small>Practical Linux + DevOps notes from real-world learning</small>
+      </div>
+    </div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end">
+      <a class="btn" href="index.html">⬅ Back to Portfolio</a>
+      <a class="btn primary" href="linux-labs.html">🧪 Open Linux Practice Labs</a>
+    </div>
+  </div>
+
+  <div class="grid">
+    <!-- Main article -->
+    <article class="card">
+      <div class="hd">
+        <h2>Article</h2>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end">
+          <span class="pill good">Incident Response</span>
+          <span class="pill warn">Linux Ops</span>
+          <span class="pill">~10 min read</span>
+        </div>
+      </div>
+
+      <div class="bd hero">
+        <h1>Incident Response on Linux: A Practical Checklist</h1>
+        <div class="meta">
+          <span>By <b>Imran Ali</b></span>
+          <span>•</span>
+          <span id="today"></span>
+          <span>•</span>
+          <span class="pill">Focus: Triage → Containment → Evidence → Recovery</span>
+        </div>
+
+        <div class="content">
+          <div class="callout warnBox">
+            <b>Important:</b> Always follow your company’s policies and get approvals before taking disruptive actions.
+            For production incidents, prefer <b>least-risk</b> steps first (collect evidence, limit blast radius, then fix).
+          </div>
+
+          <p>
+            This checklist is built for <b>real-world Linux incident response</b>. It helps you stay calm,
+            collect the right evidence, and make safe decisions under pressure.
+            You can use it for common cases like <b>CPU spikes</b>, <b>disk-full outages</b>, <b>service crashes</b>,
+            <b>suspicious logins</b>, or possible <b>malware</b>.
+          </p>
+
+          <h2 id="scope">1) Confirm scope and severity (2–5 minutes)</h2>
+          <ul>
+            <li>What is impacted: <b>one host</b>, a cluster, or an entire environment?</li>
+            <li>Impact: <b>availability</b>, <b>data exposure</b>, or both?</li>
+            <li>Time window: when did it start?</li>
+            <li>Who to notify: on-call, SRE/DevOps, security, application owners.</li>
+          </ul>
+
+          <pre><button class="copyBtn" data-copy>Copy</button><code># Quick context
+date
+hostnamectl 2>/dev/null || hostname
+uptime
+who -a
+w</code></pre>
+
+          <h2 id="triage">2) Fast triage: CPU, memory, disk, load</h2>
+          <p>Start with the system health basics:</p>
+
+          <pre><button class="copyBtn" data-copy>Copy</button><code># CPU / load
+top -o %CPU
+ps aux --sort=-%cpu | head
+
+# Memory
+free -h
+ps aux --sort=-%mem | head
+
+# Disk
+df -hT
+du -sh /var/* 2>/dev/null | sort -h | tail
+
+# Kernel / OOM / errors
+dmesg -T | tail -n 80</code></pre>
+
+          <div class="callout goodBox">
+            <b>Practical tip:</b> If disk is 95%+ full, many services will fail. Treat this as <b>high priority</b>.
+            First capture evidence, then cleanup safely (old logs, temp files, unused artifacts).
+          </div>
+
+          <h2 id="logs">3) Logs first: what changed, what failed?</h2>
+          <p>Logs quickly tell you if it’s an outage or suspicious activity.</p>
+
+          <pre><button class="copyBtn" data-copy>Copy</button><code># systemd logs (last boot + recent errors)
+journalctl -b --no-pager | tail -n 200
+journalctl -p err..alert -b --no-pager
+
+# Auth logs (Ubuntu/Debian)
+sudo tail -n 200 /var/log/auth.log 2>/dev/null
+
+# Auth logs (RHEL/CentOS)
+sudo tail -n 200 /var/log/secure 2>/dev/null</code></pre>
+
+          <h3 id="quick-ioc">Quick suspicious activity checks</h3>
+          <pre><button class="copyBtn" data-copy>Copy</button><code># Recent logins and SSH attempts
+last -a | head -n 30
+lastb 2>/dev/null | head -n 30
+
+# Current sessions
+who
+w
+
+# Listening ports & external exposure
+ss -tulpen
+sudo lsof -i -P -n | head -n 50</code></pre>
+
+          <h2 id="containment">4) Containment (reduce blast radius)</h2>
+          <p>
+            Containment depends on whether it’s an <b>availability</b> incident or a <b>security</b> incident.
+            The idea is to prevent escalation while keeping the system usable for evidence collection.
+          </p>
+
+          <div class="callout warnBox">
+            <b>Be careful:</b> If you suspect compromise, don’t delete files immediately.
+            Preserve logs, capture process/network info, and coordinate with your security team.
+          </div>
+
+          <h3 id="network-containment">Network containment options</h3>
+          <pre><button class="copyBtn" data-copy>Copy</button><code># Block suspicious IP (example - iptables)
+sudo iptables -I INPUT -s &lt;SUSPICIOUS_IP&gt; -j DROP
+
+# If using firewalld
+sudo firewall-cmd --add-rich-rule='rule family="ipv4" source address="&lt;SUSPICIOUS_IP&gt;" drop' --permanent
+sudo firewall-cmd --reload</code></pre>
+
+          <h3 id="service-containment">Service containment</h3>
+          <pre><button class="copyBtn" data-copy>Copy</button><code># Stop or isolate a failing service (example)
+sudo systemctl status nginx --no-pager
+sudo systemctl restart nginx
+sudo systemctl stop nginx   # only if approved</code></pre>
+
+          <h2 id="evidence">5) Evidence collection (minimal but useful)</h2>
+          <p>
+            If there’s any chance this is a security incident, collect basic evidence early.
+            Keep it small but valuable: processes, network, cron, users, persistence spots.
+          </p>
+
+          <pre><button class="copyBtn" data-copy>Copy</button><code># Processes & network
+ps auxfww
+ss -tulpen
+ip a
+ip r
+
+# Users & sudo
+id
+getent passwd | tail
+sudo -l 2>/dev/null
+
+# Persistence checks
+crontab -l 2>/dev/null
+sudo ls -la /etc/cron.* 2>/dev/null
+systemctl list-unit-files --type=service | grep enabled</code></pre>
+
+          <div class="callout">
+            <b>Optional forensics note:</b> For serious cases, security teams may take a disk image or memory dump.
+            Your job is to preserve the situation and avoid accidental loss of evidence.
+          </div>
+
+          <h2 id="rootcause">6) Root cause analysis (RCA)</h2>
+          <p>Now use the evidence to answer:</p>
+          <ul>
+            <li>What exactly failed? (service, disk, CPU, network, app dependency)</li>
+            <li>What triggered it? (deploy, config change, cron job, traffic spike)</li>
+            <li>Is it repeating? (pattern in logs, time-based cron)</li>
+            <li>Is it malicious? (unknown users, new processes, odd ports)</li>
+          </ul>
+
+          <pre><button class="copyBtn" data-copy>Copy</button><code># Identify recent changes (useful in real IR)
+sudo find /etc -type f -mtime -1 2>/dev/null | head
+sudo find /var/www -type f -mtime -1 2>/dev/null | head
+sudo systemctl --failed --no-pager</code></pre>
+
+          <h2 id="recovery">7) Recovery (restore safely)</h2>
+          <p>
+            After containment and RCA, apply the fix carefully.
+            Prefer a <b>reversible</b> change (rollback, config revert, disable broken job) and validate health.
+          </p>
+
+          <pre><button class="copyBtn" data-copy>Copy</button><code># Typical recovery checks
+sudo systemctl restart &lt;service&gt;
+sudo systemctl status &lt;service&gt; --no-pager
+curl -I http://localhost 2>/dev/null | head -n 2
+ss -tulpen | head</code></pre>
+
+          <h2 id="post">8) Post-incident actions (don’t skip)</h2>
+          <ul>
+            <li>Document timeline: detection → response → fix → validation</li>
+            <li>What could have prevented it? (monitoring, alerting, capacity, hardening)</li>
+            <li>Add safeguards: logrotate, disk thresholds, rate limits, MFA/SSH hardening</li>
+            <li>Create a runbook so next time is faster</li>
+          </ul>
+
+          <div class="callout goodBox">
+            <b>Portfolio idea:</b> You can convert this checklist into a “Runbook PDF” or interactive checklist page.
+            That makes your portfolio look very professional.
+          </div>
+
+          <h2 id="quicklist">Quick Checklist (copy/paste)</h2>
+          <pre><button class="copyBtn" data-copy>Copy</button><code>✅ Linux IR Quick Checklist
+1) Confirm impact + notify stakeholders
+2) Capture context: date, uptime, who/w, hostname
+3) Health triage: top, free, df, dmesg
+4) Logs: journalctl, auth logs, service logs
+5) Containment: isolate IP/service (with approvals)
+6) Evidence: ps, ss, users, cron, enabled services
+7) RCA: identify trigger/change + repeat pattern
+8) Recovery: restart/rollback + validate endpoints
+9) Post-incident: timeline + prevention tasks + runbook</code></pre>
+
+          <p class="small">
+            Want this blog linked from your index? Add a “Read more” button pointing to:
+            <b>blog-incident-response.html</b>
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <!-- TOC -->
+    <aside class="card sticky">
+      <div class="hd">
+        <h2>Table of Contents</h2>
+        <span class="pill">Jump</span>
+      </div>
+      <div class="bd toc" id="toc">
+        <a href="#scope">1) Scope & severity</a>
+        <a href="#triage">2) Fast triage</a>
+        <a href="#logs">3) Logs</a>
+        <a href="#quick-ioc">Quick IOC checks</a>
+        <a href="#containment">4) Containment</a>
+        <a href="#network-containment">Network containment</a>
+        <a href="#service-containment">Service containment</a>
+        <a href="#evidence">5) Evidence</a>
+        <a href="#rootcause">6) Root cause</a>
+        <a href="#recovery">7) Recovery</a>
+        <a href="#post">8) Post-incident</a>
+        <a href="#quicklist">Quick checklist</a>
+
+        <div class="note">
+          <b>Tip:</b> Use the copy buttons to reuse commands fast.
+          <br/><br/>
+          <b>Recommended habit:</b> Collect evidence first, then fix.
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <footer>
+    © 2025 Imran Ali • Built with Linux mindset 🐧
+  </footer>
+</div>
+
+<script>
+  // date
+  const d = new Date();
+  document.getElementById("today").textContent =
+    d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "2-digit" });
+
+  // progress bar
+  const pbar = document.getElementById("pbar");
+  function updateProgress(){
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const scrollHeight = doc.scrollHeight - doc.clientHeight;
+    const pct = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+    pbar.style.width = pct + "%";
+  }
+  window.addEventListener("scroll", updateProgress, { passive:true });
+  updateProgress();
+
+  // copy buttons
+  document.querySelectorAll("[data-copy]").forEach(btn=>{
+    btn.addEventListener("click", async ()=>{
+      const code = btn.parentElement.querySelector("code")?.innerText || "";
+      try{
+        await navigator.clipboard.writeText(code);
+        const old = btn.textContent;
+        btn.textContent = "Copied ✅";
+        setTimeout(()=> btn.textContent = old, 1100);
+      }catch{
+        btn.textContent = "Copy failed";
+        setTimeout(()=> btn.textContent = "Copy", 1100);
+      }
+    });
+  });
+
+  // TOC active section highlight
+  const links = Array.from(document.querySelectorAll("#toc a"));
+  const sections = links
+    .map(a => document.querySelector(a.getAttribute("href")))
+    .filter(Boolean);
+
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        links.forEach(l=>l.classList.remove("active"));
+        const id = "#" + e.target.id;
+        const link = links.find(l => l.getAttribute("href") === id);
+        if(link) link.classList.add("active");
+      }
+    });
+  }, { rootMargin: "-35% 0px -55% 0px", threshold: 0.01 });
+
+  sections.forEach(s=> io.observe(s));
+</script>
+</body>
+</html>
