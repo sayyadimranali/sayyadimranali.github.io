@@ -3,12 +3,11 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-<title>Linux Practice Labs (Learning Mode+) | Imran Ali</title>
+<title>Linux Practice Labs (Learning Mode) | Imran Ali</title>
 <style>
   :root{
     --bg:#070A10;
     --panel: rgba(255,255,255,.06);
-    --panel2: rgba(255,255,255,.10);
     --border: rgba(255,255,255,.14);
     --text: rgba(255,255,255,.90);
     --muted: rgba(255,255,255,.62);
@@ -35,8 +34,11 @@
   a{color:var(--accent); text-decoration:none; font-weight:950}
   a:hover{text-decoration:underline}
 
-  .wrap{max-width:1320px;margin:0 auto;padding:18px 18px 80px}
-  .topbar{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px}
+  .wrap{max-width:1320px;margin:0 auto;padding:18px 18px 90px}
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    margin-bottom: 12px;
+  }
   .brand{display:flex; gap:10px; align-items:center}
   .logo{
     width:38px;height:38px;border-radius:14px;
@@ -46,8 +48,8 @@
   }
   .brand b{display:block; letter-spacing:.2px}
   .brand small{display:block;color:var(--muted); margin-top:2px}
-  .actions{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
 
+  .actions{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
   .btn{
     border:1px solid var(--border);
     background: rgba(255,255,255,.06);
@@ -67,13 +69,18 @@
   }
   .btn.danger{border-color: rgba(255,107,107,.35); background: rgba(255,107,107,.10)}
 
-  .grid{display:grid; grid-template-columns: 460px 1fr; gap:14px; align-items:start}
+  .grid{
+    display:grid;
+    grid-template-columns: 460px 1fr;
+    gap:14px;
+    align-items:start;
+  }
   @media (max-width: 1080px){ .grid{grid-template-columns:1fr} }
 
   .card{
     border:1px solid var(--border);
     border-radius: var(--radius);
-    background: linear-gradient(180deg, var(--panel), rgba(255,255,255,.03));
+    background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
     box-shadow: var(--shadow2);
     overflow:hidden;
   }
@@ -100,37 +107,30 @@
   .pill.warn{border-color: rgba(255,204,102,.35); background: rgba(255,204,102,.08)}
   .pill.bad{border-color: rgba(255,107,107,.35); background: rgba(255,107,107,.08)}
 
-  .statsRow{display:flex; gap:8px; flex-wrap:wrap}
-
+  .statsRow{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end}
   .progressWrap{
     padding: 12px 12px;
     border-radius: 16px;
     border: 1px solid rgba(255,255,255,.10);
     background: rgba(255,255,255,.04);
+    margin-bottom: 10px;
   }
   .bar{
-    height:10px;border-radius:999px;background: rgba(255,255,255,.08);
-    overflow:hidden;border:1px solid rgba(255,255,255,.10); margin-top:10px;
+    height:10px;
+    border-radius:999px;
+    background: rgba(255,255,255,.08);
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.10);
+    margin-top:10px;
   }
   .bar > div{
-    height:100%; width:0%;
+    height:100%;
+    width:0%;
     background: linear-gradient(90deg, rgba(110,231,255,.85), rgba(167,139,250,.80), rgba(46,229,157,.75));
     border-radius:999px;
   }
 
-  .search{
-    width:100%;
-    padding: 12px 12px;
-    border-radius: 14px;
-    border: 1px solid rgba(255,255,255,.14);
-    background: rgba(255,255,255,.05);
-    color: var(--text);
-    outline:none;
-    font-weight: 900;
-  }
-  .search:focus{border-color: rgba(110,231,255,.35)}
-
-  .filterRow{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+  .filterRow{display:flex; gap:8px; flex-wrap:wrap; margin-top: 10px}
   .chip{
     padding: 8px 10px;
     border-radius: 999px;
@@ -144,8 +144,29 @@
   }
   .chip:hover{transform: translateY(-1px); border-color: rgba(110,231,255,.25); background: rgba(255,255,255,.07)}
   .chip.active{border-color: rgba(110,231,255,.45); background: rgba(110,231,255,.10)}
+  .search{
+    width:100%;
+    padding: 12px 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.05);
+    color: var(--text);
+    outline:none;
+    font-weight: 900;
+    margin-top: 10px;
+  }
+  .search:focus{border-color: rgba(110,231,255,.35)}
+  .kbd{
+    font-family: ui-monospace, monospace;
+    padding: 2px 6px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.06);
+    color: rgba(255,255,255,.86);
+    font-weight: 950;
+  }
 
-  .labs{display:grid; gap:10px; max-height: 460px; overflow:auto; padding-right:2px; margin-top:12px;}
+  .labs{display:grid; gap:10px; max-height: 520px; overflow:auto; padding-right: 2px; margin-top: 10px;}
   .lab{
     padding: 12px 12px;
     border-radius: 16px;
@@ -158,9 +179,8 @@
   .lab.active{background: rgba(110,231,255,.08); border-color: rgba(110,231,255,.40)}
   .lab b{display:block;font-size:13px}
   .lab small{display:block;color:var(--muted); margin-top:4px; line-height:1.4}
-  .lab .miniRow{display:flex; gap:6px; flex-wrap:wrap; margin-top:8px}
+  .miniRow{display:flex; gap:6px; flex-wrap:wrap; margin-top:8px}
 
-  /* Details / Lesson mode */
   .details{
     margin-top: 12px;
     padding: 12px 12px;
@@ -170,11 +190,20 @@
   }
   .details h3{margin:0 0 8px; font-size: 13px}
   .details p{margin:6px 0; color: rgba(255,255,255,.74); font-size: 12px; line-height: 1.5}
-  .details .row{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
 
-  .toggle{display:flex; align-items:center; gap:8px; cursor:pointer; user-select:none; font-weight: 900; font-size: 12px; color: rgba(255,255,255,.80);}
-  .toggle input{accent-color: #6ee7ff}
-  .box{
+  .tabs{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+  .tab{
+    padding: 8px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.05);
+    font-weight: 950;
+    font-size: 12px;
+    cursor:pointer;
+    user-select:none;
+  }
+  .tab.active{border-color: rgba(110,231,255,.45); background: rgba(110,231,255,.10)}
+  .panel{
     margin-top:10px;
     padding: 10px 10px;
     border-radius: 14px;
@@ -183,21 +212,11 @@
     color: rgba(255,255,255,.82);
     font-weight: 850;
     font-size: 12px;
-    line-height: 1.55;
+    line-height: 1.5;
     display:none;
     white-space:pre-wrap;
   }
-  .box.show{display:block}
-
-  .kbd{
-    font-family: ui-monospace, monospace;
-    padding: 2px 6px;
-    border-radius: 8px;
-    border: 1px solid rgba(255,255,255,.14);
-    background: rgba(255,255,255,.06);
-    color: rgba(255,255,255,.86);
-    font-weight: 950;
-  }
+  .panel.show{display:block}
 
   /* Terminal */
   .terminal{min-height: 680px; display:flex; flex-direction:column}
@@ -214,7 +233,7 @@
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
     color: rgba(255,255,255,.75);
     font-size: 12px;
-    font-weight: 950;
+    font-weight: 900;
   }
   .termOut{
     padding: 14px 14px 6px;
@@ -230,8 +249,10 @@
   .warnText{color: rgba(255,204,102,.95); font-weight:900}
   .err{color: rgba(255,107,107,.95); font-weight:900}
   .muted{color: rgba(255,255,255,.62)}
+
   .termIn{
-    display:flex; gap:10px;
+    display:flex;
+    gap:10px;
     padding: 12px 14px 14px;
     border-top: 1px solid rgba(255,255,255,.08);
     background: rgba(0,0,0,.12);
@@ -246,75 +267,72 @@
     color: var(--text);
     outline:none;
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-    font-weight: 950;
+    font-weight: 900;
     font-size: 13px;
   }
   .termIn input:focus{border-color: rgba(110,231,255,.35)}
 
   /* Autocomplete dropdown */
-  .ac{
+  .suggest{
     position:absolute;
     left: 14px;
-    right: 140px;
-    bottom: 56px;
-    background: rgba(5,8,14,.88);
-    border:1px solid rgba(110,231,255,.18);
+    right: 120px;
+    bottom: 58px;
     border-radius: 14px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(0,0,0,.55);
+    backdrop-filter: blur(10px);
     overflow:hidden;
     display:none;
-    box-shadow: 0 18px 50px rgba(0,0,0,.55);
-    backdrop-filter: blur(10px);
   }
-  .ac.show{display:block}
-  .acItem{
+  .suggest.show{display:block}
+  .sItem{
     padding: 10px 12px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
     font-family: ui-monospace, monospace;
-    font-weight: 900;
+    font-weight: 850;
+    font-size: 12px;
     color: rgba(255,255,255,.86);
-    border-top: 1px solid rgba(255,255,255,.06);
     cursor:pointer;
   }
-  .acItem:first-child{border-top:none}
-  .acItem:hover, .acItem.active{
-    background: rgba(110,231,255,.10);
-  }
-  .acHint{
-    padding: 8px 12px;
-    color: rgba(255,255,255,.62);
-    font-size: 11px;
-    font-weight: 900;
-    border-top: 1px solid rgba(255,255,255,.06);
-  }
+  .sItem:last-child{border-bottom:none}
+  .sItem.active{background: rgba(110,231,255,.14)}
+  .sItem small{display:block; color: rgba(255,255,255,.55); font-weight:800; margin-top:4px}
 
-  /* Certificate Modal */
+  /* Certificate modal */
   .modalOverlay{
     position:fixed; inset:0;
     background: rgba(0,0,0,.65);
-    display:none; align-items:center; justify-content:center;
+    display:none;
+    align-items:center;
+    justify-content:center;
     padding: 18px;
-    z-index: 999;
+    z-index:9999;
   }
   .modalOverlay.show{display:flex}
   .modal{
-    width:min(920px, 100%);
-    border-radius: 20px;
+    width:min(900px, 100%);
+    border-radius: 22px;
     border: 1px solid rgba(255,255,255,.14);
     background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
-    box-shadow: 0 40px 110px rgba(0,0,0,.60);
+    box-shadow: 0 30px 80px rgba(0,0,0,.65);
     overflow:hidden;
   }
   .modalHd{
     padding: 14px 16px;
-    border-bottom: 1px solid rgba(255,255,255,.10);
-    background: linear-gradient(135deg, rgba(110,231,255,.14), rgba(167,139,250,.10));
-    display:flex; justify-content:space-between; align-items:center; gap:10px;
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    align-items:center;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    background: linear-gradient(135deg, rgba(110,231,255,.12), rgba(167,139,250,.10));
   }
-  .modalHd b{font-size:14px}
-  .modalBd{padding: 14px 16px}
-  .modalRow{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
-  .modalBd input{
+  .modalHd b{font-size:13px}
+  .modalBd{padding:14px 16px}
+  .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+  .textInput{
     flex:1;
-    min-width: 220px;
+    min-width: 240px;
     padding: 12px 12px;
     border-radius: 14px;
     border: 1px solid rgba(255,255,255,.14);
@@ -323,12 +341,17 @@
     outline:none;
     font-weight: 900;
   }
-  .modalBd input:focus{border-color: rgba(110,231,255,.35)}
-  canvas{width:100%; height:auto; border-radius: 16px; border:1px solid rgba(255,255,255,.10); background: rgba(0,0,0,.15); margin-top:12px}
+  canvas{width:100%; border-radius: 18px; border:1px solid rgba(255,255,255,.10); background: rgba(0,0,0,.25)}
+  .footer{
+    margin-top: 14px;
+    color: var(--muted);
+    font-size: 12px;
+    text-align:center;
+  }
 
-  .footer{margin-top:14px;color:var(--muted);font-size:12px;text-align:center}
-
-  @media (prefers-reduced-motion: reduce){ *{transition:none !important} }
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important}
+  }
 </style>
 </head>
 <body>
@@ -337,12 +360,13 @@
     <div class="brand">
       <div class="logo" aria-hidden="true"></div>
       <div>
-        <b>Linux Practice Labs — Learning Mode+</b>
-        <small>Lesson mode • Autocomplete + Tab completion • XP • badges • Certificate (PNG)</small>
+        <b>Linux Practice Labs — Learning Mode</b>
+        <small>Lessons + terminal practice • TAB autocomplete • XP + badges • Certificate</small>
       </div>
     </div>
     <div class="actions">
       <a class="btn" href="index.html">⬅ Back to Portfolio</a>
+      <button class="btn primary" id="certBtn" style="display:none">🏆 View Certificate</button>
       <button class="btn primary" id="resetLabBtn">♻ Reset Current Lab</button>
       <button class="btn danger" id="wipeProgressBtn">🧨 Wipe Progress</button>
     </div>
@@ -354,33 +378,26 @@
       <div class="hd">
         <h2>Learning Dashboard</h2>
         <div class="statsRow">
-          <span class="pill" id="donePill">0/20 Done</span>
+          <span class="pill" id="donePill">0/0 Done</span>
           <span class="pill good" id="xpPill">XP: 0</span>
           <span class="pill" id="badgePill">Badges: 0</span>
+          <span class="pill" id="levelPill">Level: Newbie</span>
         </div>
       </div>
 
       <div class="bd">
         <div class="progressWrap">
-          <div style="display:flex; justify-content:space-between; gap:10px; align-items:center">
+          <div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
             <b style="font-size:13px">Progress</b>
-            <span class="pill" id="levelPill">Level: Newbie</span>
+            <span class="pill" id="tipPill">Tip: press <span class="kbd">TAB</span></span>
           </div>
           <div class="bar"><div id="barFill"></div></div>
-          <div style="margin-top:10px; color:var(--muted); font-size:12px; font-weight:900; line-height:1.5">
-            Tips:
-            <span class="kbd">help</span>
-            <span class="kbd">hint</span>
-            <span class="kbd">solution</span>
-            <span class="kbd">status</span>
-            <span class="kbd">lesson</span>
-            • Press <span class="kbd">Tab</span> for completion
+          <div style="margin-top:10px;color:var(--muted);font-size:12px;font-weight:850;line-height:1.6">
+            Use: <span class="kbd">help</span> <span class="kbd">labs</span> <span class="kbd">status</span> <span class="kbd">hint</span> <span class="kbd">solution</span><br/>
+            Pipes: <span class="kbd">cat app.log | grep ERROR</span> • Redirect: <span class="kbd">echo hi > file</span>
           </div>
-        </div>
-
-        <div style="margin-top:12px">
-          <input class="search" id="search" placeholder="Search labs (grep, tar, systemctl, pipes, cron...)" />
           <div class="filterRow" id="filters"></div>
+          <input class="search" id="search" placeholder="Search labs (grep, systemctl, network, tar, cron, du)..." />
         </div>
 
         <div class="labs" id="labList"></div>
@@ -390,25 +407,24 @@
           <p id="labGoal"></p>
           <p id="labWhy"></p>
 
-          <div class="row">
+          <div class="miniRow" style="margin-top:10px">
+            <span class="pill" id="labTagPill">Tag: -</span>
             <span class="pill" id="labDiffPill">Difficulty: -</span>
-            <span class="pill" id="labXpPill">XP: -</span>
+            <span class="pill good" id="labXpPill">XP: -</span>
             <span class="pill warn" id="labStatusPill">Not completed</span>
           </div>
 
-          <div style="margin-top:10px">
-            <label class="toggle"><input type="checkbox" id="showLesson"> Show lesson (steps + expected output)</label>
-            <div class="box" id="lessonBox"></div>
-
-            <label class="toggle" style="margin-top:10px"><input type="checkbox" id="showHint"> Show hint</label>
-            <div class="box" id="hintBox"></div>
-
-            <label class="toggle" style="margin-top:10px"><input type="checkbox" id="showSolution"> Show solution</label>
-            <div class="box" id="solutionBox"></div>
+          <div class="tabs">
+            <div class="tab active" data-tab="lesson">📘 Lesson</div>
+            <div class="tab" data-tab="hint">💡 Hint</div>
+            <div class="tab" data-tab="solution">✅ Solution</div>
           </div>
+          <div class="panel show" id="lessonPanel"></div>
+          <div class="panel" id="hintPanel"></div>
+          <div class="panel" id="solutionPanel"></div>
 
-          <div class="row" style="margin-top:12px">
-            <button class="btn" id="copyGoalBtn">📋 Copy Solution</button>
+          <div class="miniRow" style="margin-top:12px">
+            <button class="btn" id="copySolutionBtn">📋 Copy Solution</button>
             <button class="btn primary" id="startLabBtn">🚀 Start Lab</button>
           </div>
         </div>
@@ -431,16 +447,16 @@
       <div class="termOut" id="out"></div>
 
       <div class="termIn">
-        <div class="ac" id="ac"></div>
+        <div class="suggest" id="suggestBox"></div>
         <input id="input" autocomplete="off" spellcheck="false"
-               placeholder="Type commands… (Tab for autocomplete)" />
+               placeholder="Type commands… (TAB for autocomplete)" />
         <button class="btn primary" id="runBtn">▶ Run</button>
       </div>
     </div>
   </div>
 
   <div class="footer">
-    Built by Imran Ali • Safe simulation • Offline-friendly • Works on GitHub Pages
+    Built by Imran Ali • Safe simulation • No server needed • Great for portfolio demos
   </div>
 </div>
 
@@ -449,32 +465,39 @@
   <div class="modal">
     <div class="modalHd">
       <b>🏆 Certificate of Completion</b>
-      <button class="btn" id="closeCertBtn">✕ Close</button>
+      <button class="btn" id="closeCertBtn">✖ Close</button>
     </div>
     <div class="modalBd">
-      <div class="modalRow">
-        <input id="certName" placeholder="Enter your name for certificate (ex: John Doe)" />
+      <div class="row">
+        <input class="textInput" id="certName" placeholder="Your name (for certificate)" />
         <button class="btn primary" id="renderCertBtn">🎨 Render</button>
-        <button class="btn" id="downloadCertBtn">⬇ Download PNG</button>
+        <button class="btn primary" id="downloadCertBtn">⬇ Download PNG</button>
       </div>
-      <canvas id="certCanvas" width="1600" height="1000"></canvas>
-      <div style="margin-top:10px; color:rgba(255,255,255,.65); font-weight:900; font-size:12px">
-        Tip: This certificate is generated locally in your browser (no upload).
+      <div style="margin-top:12px">
+        <canvas id="certCanvas" width="1600" height="900"></canvas>
       </div>
+      <div class="footer">Tip: You can type your name and download a PNG certificate.</div>
     </div>
   </div>
 </div>
 
 <script>
 /**********************
- * Linux Labs Learning Mode+ (browser only)
+ * Linux Labs v3
+ * - Lesson mode
+ * - TAB autocomplete
+ * - More labs
+ * - Certificate
  **********************/
 const $ = (q)=>document.querySelector(q);
+
 const out = $("#out");
 const input = $("#input");
 const runBtn = $("#runBtn");
+
 const resetLabBtn = $("#resetLabBtn");
 const wipeProgressBtn = $("#wipeProgressBtn");
+const certBtn = $("#certBtn");
 
 const labList = $("#labList");
 const pathLabel = $("#pathLabel");
@@ -487,64 +510,53 @@ const badgePill = $("#badgePill");
 const levelPill = $("#levelPill");
 const barFill = $("#barFill");
 
+const filters = $("#filters");
+const search = $("#search");
+
 const labTitle = $("#labTitle");
 const labGoal = $("#labGoal");
 const labWhy = $("#labWhy");
+const labTagPill = $("#labTagPill");
 const labDiffPill = $("#labDiffPill");
 const labXpPill = $("#labXpPill");
 const labStatusPill = $("#labStatusPill");
 
-const showLesson = $("#showLesson");
-const showHint = $("#showHint");
-const showSolution = $("#showSolution");
-const lessonBox = $("#lessonBox");
-const hintBox = $("#hintBox");
-const solutionBox = $("#solutionBox");
+const lessonPanel = $("#lessonPanel");
+const hintPanel = $("#hintPanel");
+const solutionPanel = $("#solutionPanel");
 const startLabBtn = $("#startLabBtn");
-const copyGoalBtn = $("#copyGoalBtn");
+const copySolutionBtn = $("#copySolutionBtn");
 
-const search = $("#search");
-const filters = $("#filters");
+const suggestBox = $("#suggestBox");
 
-// Autocomplete
-const ac = $("#ac");
-let acItems = [];
-let acIndex = 0;
-
-// Certificate modal
 const certOverlay = $("#certOverlay");
 const closeCertBtn = $("#closeCertBtn");
 const certName = $("#certName");
+const certCanvas = $("#certCanvas");
 const renderCertBtn = $("#renderCertBtn");
 const downloadCertBtn = $("#downloadCertBtn");
-const certCanvas = $("#certCanvas");
-const ctx = certCanvas.getContext("2d");
 
-// Storage
 const STORE_KEY = "imran_linux_labs_v3";
-const loadStore = ()=> { try { return JSON.parse(localStorage.getItem(STORE_KEY)||"{}"); } catch { return {}; } };
-const saveStore = (obj)=> localStorage.setItem(STORE_KEY, JSON.stringify(obj));
 
-// Fake FS
+/* ---------- FS ---------- */
 function buildFS(){
   return {
     "/": { type:"dir", kids: {
       "home": { type:"dir", kids: {
         "imran": { type:"dir", kids: {
           "readme.txt": { type:"file", data:
-`Welcome to Linux Practice Labs — Learning Mode+
-Commands: help | labs | status | lesson | hint | solution
-Autocomplete: Tab
-Pipes: cat file | grep ERROR
-Redirection: echo hi > file.txt   (overwrite)   /   echo hi >> file.txt (append)`},
+`Welcome to Linux Practice Labs (Learning Mode)!
+Try: help | labs | status | hint | solution
+TAB for autocomplete (commands & paths).
+`},
           "projects": { type:"dir", kids: {
             "notes.md": { type:"file", data:
 `# Ops Notes
-- df -h, df -i
-- journalctl -xe
-- grep ERROR /var/log/...
+- df -h to check disk usage
+- journalctl -xe to check logs
+- grep ERROR /var/log/... for quick triage
 - chmod +x for scripts
-- tar -czf backups.tar.gz folder/`},
+`},
             "deploy.sh": { type:"file", data:
 `#!/bin/bash
 echo "Deploy starting..."
@@ -556,6 +568,7 @@ ERROR database timeout
 INFO retry ok
 ERROR disk full on /var
 INFO shutdown`},
+            "bigfile.bin": { type:"file", data: "X".repeat(1024*50) } // fake
           }},
           "labs": { type:"dir", kids: {
             "text": { type:"dir", kids: {
@@ -569,7 +582,23 @@ foxtrot
 golf
 hotel
 india
-juliet`},
+juliet
+kilo
+lima
+mike
+november
+oscar
+papa
+quebec
+romeo
+sierra
+tango
+uniform
+victor
+whiskey
+xray
+yankee
+zulu`},
               "server.log": { type:"file", data:
 `INFO boot ok
 INFO user=admin login ok
@@ -581,14 +610,17 @@ INFO done`},
             }},
             "fs": { type:"dir", kids: {
               "dirA": { type:"dir", kids: {
-                "dirB": { type:"dir", kids: { "secret.txt": { type:"file", data:"TOP_SECRET=linux_is_fun" } } }
+                "dirB": { type:"dir", kids: {
+                  "secret.txt": { type:"file", data: "TOP_SECRET=linux_is_fun" }
+                }}
               }},
               "tmp": { type:"dir", kids: {}},
+              "archive": { type:"dir", kids: {}},
             }},
             "permissions": { type:"dir", kids: {
               "scripts": { type:"dir", kids: {
-                "clean.sh": { type:"file", data:"#!/bin/bash\necho \"cleaning logs...\"\n", executable:false },
-                "backup.sh": { type:"file", data:"#!/bin/bash\necho \"backup running...\"\n", executable:false },
+                "clean.sh": { type:"file", data: "#!/bin/bash\necho \"cleaning logs...\"\n", executable:false },
+                "backup.sh": { type:"file", data: "#!/bin/bash\necho \"backup running...\"\n", executable:false },
               }},
             }},
             "process": { type:"dir", kids: {
@@ -600,18 +632,11 @@ INFO done`},
 404  python
 505  node`},
             }},
-            "redirection": { type:"dir", kids: {
-              "notes.txt": { type:"file", data:"initial\n" },
-            }},
-            "archive": { type:"dir", kids: {
-              "logs": { type:"dir", kids: {
-                "a.log": { type:"file", data:"INFO ok\nERROR boom\n" },
-                "b.log": { type:"file", data:"WARN hi\nINFO ok\n" },
-              }},
-            }},
-            "cron": { type:"dir", kids: {
-              "crontab.txt": { type:"file", data:"# (empty)\n" },
-            }},
+            "redirection": { type:"dir", kids: { "notes.txt": { type:"file", data:"initial\n" } } },
+            "cron": { type:"dir", kids: { "crontab.txt": { type:"file", data:
+`# m h  dom mon dow   command
+*/5 * * * * /home/imran/projects/deploy.sh
+0 2 * * * /home/imran/labs/permissions/scripts/backup.sh` } } },
           }},
         }},
       }},
@@ -645,29 +670,14 @@ let cwd = "/home/imran";
 let history = [];
 let histIndex = -1;
 
-// Print
-function printLine(text, cls="line"){
-  const div = document.createElement("div");
-  div.className = "line " + cls;
-  div.textContent = text;
-  out.appendChild(div);
-  out.scrollTop = out.scrollHeight;
-}
-function promptLine(cmd){
-  const shown = cwd.replace("/home/imran","~");
-  printLine(`imran@labs:${shown}$ ${cmd}`, "cmd");
-}
-function setPathLabel(){
-  pathLabel.textContent = `imran@labs:${cwd.replace("/home/imran","~")}$`;
-}
-
-// Path helpers
 function norm(path){
   if(!path || path.trim()==="") return cwd;
   path = path.trim();
   if(path === "~") path = "/home/imran";
   if(path.startsWith("~/")) path = "/home/imran/" + path.slice(2);
-  if(!path.startsWith("/")) path = (cwd.endsWith("/") ? cwd : cwd + "/") + path;
+  if(!path.startsWith("/")){
+    path = (cwd.endsWith("/") ? cwd : cwd + "/") + path;
+  }
   const parts = [];
   for(const seg of path.split("/")){
     if(!seg || seg === ".") continue;
@@ -687,6 +697,14 @@ function getNode(path){
   }
   return node || null;
 }
+function ensureDir(path){
+  const n = getNode(path);
+  return n && n.type==="dir" ? n : null;
+}
+function ensureFile(path){
+  const n = getNode(path);
+  return n && n.type==="file" ? n : null;
+}
 function parentPath(path){
   path = norm(path);
   if(path === "/") return "/";
@@ -698,36 +716,15 @@ function baseName(path){
   const p = norm(path).split("/").filter(Boolean);
   return p.length ? p[p.length-1] : "/";
 }
-function ensureDir(path){
-  const n = getNode(path);
-  return n && n.type==="dir" ? n : null;
-}
-function ensureFile(path){
-  const n = getNode(path);
-  return n && n.type==="file" ? n : null;
-}
-function walk(path, node, cb){
-  cb(path,node);
-  if(node.type==="dir"){
-    for(const k of Object.keys(node.kids)){
-      walk(path + (path.endsWith("/")?"":"/") + k, node.kids[k], cb);
-    }
-  }
-}
-function listPathsUnder(path){
-  const n = getNode(path);
-  if(!n || n.type!=="dir") return [];
-  return Object.keys(n.kids).sort().map(k=> (path.endsWith("/")?path:path+"/") + k);
-}
-
-// File ops
 function writeFile(path, content, append=false){
   const full = norm(path);
   const dir = parentPath(full);
   const dirNode = ensureDir(dir);
-  if(!dirNode) return {ok:false, msg:`write: cannot write '${path}': No such directory`};
+  if(!dirNode) return {ok:false, msg:`write: cannot write to '${path}': No such directory`};
   const name = baseName(full);
-  if(dirNode.kids[name] && dirNode.kids[name].type !== "file") return {ok:false, msg:`write: '${path}' is not a file`};
+  if(dirNode.kids[name] && dirNode.kids[name].type !== "file"){
+    return {ok:false, msg:`write: '${path}' is not a file`};
+  }
   if(!dirNode.kids[name]) dirNode.kids[name] = { type:"file", data:"", executable:false };
   const f = dirNode.kids[name];
   f.data = append ? (f.data + content) : content;
@@ -747,12 +744,12 @@ function removePath(path){
 function copyPath(src, dst){
   const s = getNode(src);
   if(!s) return {ok:false, msg:`cp: cannot stat '${src}': No such file or directory`};
-  if(s.type==="dir") return {ok:false, msg:`cp: omitting directory '${src}' (simulation supports files only)`};
   const dFull = norm(dst);
   const dDir = parentPath(dFull);
   const dDirNode = ensureDir(dDir);
   if(!dDirNode) return {ok:false, msg:`cp: cannot copy to '${dst}': No such directory`};
   const name = baseName(dFull);
+  if(s.type==="dir") return {ok:false, msg:`cp: omitting directory '${src}' (sim supports files only)`};
   dDirNode.kids[name] = { type:"file", data: s.data, executable: !!s.executable };
   return {ok:true, msg:""};
 }
@@ -761,14 +758,581 @@ function movePath(src, dst){
   if(!c.ok) return c;
   return removePath(src);
 }
+function walk(path, node, cb){
+  cb(path, node);
+  if(node.type==="dir"){
+    for(const k of Object.keys(node.kids)){
+      walk(path + (path.endsWith("/")?"":"/") + k, node.kids[k], cb);
+    }
+  }
+}
 
-// Commands
+function printLine(text, cls="line"){
+  const div = document.createElement("div");
+  div.className = "line " + cls;
+  div.textContent = text;
+  out.appendChild(div);
+  out.scrollTop = out.scrollHeight;
+}
+function promptLine(cmd){
+  const shown = cwd.replace("/home/imran","~");
+  printLine(`imran@labs:${shown}$ ${cmd}`, "cmd");
+}
+function setPathLabel(){
+  pathLabel.textContent = `imran@labs:${cwd.replace("/home/imran","~")}$`;
+}
+
+/* ---------- Learning State ---------- */
+function loadStore(){
+  try { return JSON.parse(localStorage.getItem(STORE_KEY) || "{}"); }
+  catch { return {}; }
+}
+function saveStore(obj){ localStorage.setItem(STORE_KEY, JSON.stringify(obj)); }
+
+let saved = loadStore();
+let state = {
+  done: new Set(saved.done || []),
+  xp: Number(saved.xp || 0),
+  badges: Array.isArray(saved.badges) ? saved.badges : [],
+  lastLab: saved.lastLab || null
+};
+
+function levelName(xp){
+  if(xp < 60) return "Newbie";
+  if(xp < 160) return "Apprentice";
+  if(xp < 300) return "Operator";
+  if(xp < 460) return "Engineer";
+  return "Master";
+}
+function recomputeBadges(){
+  const b = new Set(state.badges);
+  const doneCount = state.done.size;
+
+  const tagComplete = (tag)=>{
+    const labs = LABS.filter(l=>l.tag===tag).map(l=>l.id);
+    return labs.length && labs.every(id=>state.done.has(id));
+  };
+
+  if(doneCount >= 1) b.add("First Blood");
+  if(doneCount >= 7) b.add("Command Runner");
+  if(doneCount >= 15) b.add("Ops Warrior");
+  if(doneCount >= LABS.length) b.add("Linux Hero");
+
+  ["Navigation","Text","Find","Permissions","Files","Processes","Logs","Pipes","Services","Network","Archive","Disk","Cron"].forEach(t=>{
+    if(tagComplete(t)) b.add(`${t} Master`);
+  });
+
+  state.badges = [...b].sort();
+}
+
+/* ---------- Labs ---------- */
+const LABS = [
+  // Navigation
+  { id:"l1", tag:"Navigation", diff:"Beginner", xp:10,
+    title:"Lab 1 — Navigation Basics",
+    goal:"Go to ~/projects and list files.",
+    why:"Every Linux task starts with moving around confidently.",
+    lesson:
+`Navigation = speed.
+- ls shows what's in a directory
+- cd changes directory
+Examples:
+  cd ~/projects
+  ls`,
+    hint:"Try: cd ~/projects  then: ls",
+    solution:"cd ~/projects\nls",
+    validate: (ctx)=> ctx.cwd === "/home/imran/projects" && ctx.did.lsInProjects
+  },
+  { id:"l2", tag:"Navigation", diff:"Beginner", xp:10,
+    title:"Lab 2 — Absolute paths",
+    goal:"From anywhere, display /etc/hosts using cat.",
+    why:"Absolute paths are reliable during incidents.",
+    lesson:
+`Absolute paths start with / and work from anywhere.
+Example:
+  cat /etc/hosts`,
+    hint:"Try: cat /etc/hosts",
+    solution:"cat /etc/hosts",
+    validate: (ctx)=> ctx.did.catHosts
+  },
+
+  // Text
+  { id:"l3", tag:"Text", diff:"Beginner", xp:12,
+    title:"Lab 3 — grep ERROR in logs",
+    goal:"Find ERROR lines in ~/labs/text/server.log",
+    why:"Fast triage means searching logs effectively.",
+    lesson:
+`grep finds matching lines.
+Format:
+  grep PATTERN file
+Example:
+  grep ERROR server.log`,
+    hint:"Try: grep ERROR ~/labs/text/server.log",
+    solution:"grep ERROR ~/labs/text/server.log",
+    validate: (ctx)=> ctx.did.grepError
+  },
+  { id:"l4", tag:"Text", diff:"Intermediate", xp:14,
+    title:"Lab 4 — tail last 3 lines",
+    goal:"Show last 3 lines of ~/projects/app.log",
+    why:"tail is the fastest way to see latest issues.",
+    lesson:
+`tail shows last lines of a file.
+In real Linux: tail -n 3 app.log
+In this lab:  tail app.log 3`,
+    hint:"Try: cd ~/projects then: tail app.log 3",
+    solution:"cd ~/projects\ntail app.log 3",
+    validate: (ctx)=> ctx.did.tail3
+  },
+  { id:"l5", tag:"Text", diff:"Intermediate", xp:14,
+    title:"Lab 5 — wc counts",
+    goal:"Run wc on ~/labs/text/words.txt",
+    why:"Useful for quick size checks and scripting.",
+    lesson:
+`wc shows line/word/byte counts.
+Example:
+  wc words.txt`,
+    hint:"Try: wc ~/labs/text/words.txt",
+    solution:"wc ~/labs/text/words.txt",
+    validate: (ctx)=> ctx.did.wcWords
+  },
+
+  // Find
+  { id:"l6", tag:"Find", diff:"Intermediate", xp:16,
+    title:"Lab 6 — find secret file",
+    goal:"Find secret.txt under ~/labs/fs",
+    why:"Finding mislocated files is common during ops.",
+    lesson:
+`find searches directories.
+Format:
+  find PATH -name filename
+Example:
+  find . -name secret.txt`,
+    hint:"Try: find ~/labs/fs -name secret.txt",
+    solution:"find ~/labs/fs -name secret.txt",
+    validate: (ctx)=> ctx.did.findSecret
+  },
+
+  // Permissions
+  { id:"l7", tag:"Permissions", diff:"Intermediate", xp:16,
+    title:"Lab 7 — chmod +x",
+    goal:"Make ~/labs/permissions/scripts/clean.sh executable",
+    why:"Fix scripts that fail because they aren't executable.",
+    lesson:
+`chmod changes permissions.
+Common:
+  chmod +x script.sh`,
+    hint:"Try: chmod +x ~/labs/permissions/scripts/clean.sh",
+    solution:"chmod +x ~/labs/permissions/scripts/clean.sh",
+    validate: (ctx)=> ctx.did.chmodClean
+  },
+
+  // Files
+  { id:"l8", tag:"Files", diff:"Intermediate", xp:16,
+    title:"Lab 8 — mkdir + touch",
+    goal:"Create ~/labs/fs/tmp/demo and hello.txt inside it",
+    why:"Creating structured directories/files is daily work.",
+    lesson:
+`mkdir creates a directory, touch creates a file.
+Example:
+  mkdir demo
+  touch demo/hello.txt`,
+    hint:"Try: mkdir ~/labs/fs/tmp/demo then touch ~/labs/fs/tmp/demo/hello.txt",
+    solution:"mkdir ~/labs/fs/tmp/demo\ntouch ~/labs/fs/tmp/demo/hello.txt",
+    validate: (ctx)=> ctx.did.mkDemo && ctx.did.touchHello
+  },
+  { id:"l9", tag:"Files", diff:"Intermediate", xp:16,
+    title:"Lab 9 — cp and mv",
+    goal:"Copy notes.md to notes-copy.md then move to notes-moved.md in ~/labs/fs/tmp",
+    why:"Copying/moving files safely is essential in production.",
+    lesson:
+`cp copies, mv renames/moves.
+Example:
+  cp a b
+  mv b c`,
+    hint:"Try: cp ~/projects/notes.md ~/labs/fs/tmp/notes-copy.md then mv to notes-moved.md",
+    solution:"cp ~/projects/notes.md ~/labs/fs/tmp/notes-copy.md\nmv ~/labs/fs/tmp/notes-copy.md ~/labs/fs/tmp/notes-moved.md",
+    validate: (ctx)=> ctx.did.cpNotes && ctx.did.mvNotes
+  },
+
+  // Processes
+  { id:"l10", tag:"Processes", diff:"Beginner", xp:12,
+    title:"Lab 10 — ps",
+    goal:"Run ps and confirm docker exists",
+    why:"Process checks are core to incident response.",
+    lesson:
+`ps lists processes.
+Look for suspicious or critical services.`,
+    hint:"Try: ps",
+    solution:"ps",
+    validate: (ctx)=> ctx.did.psDocker
+  },
+  { id:"l11", tag:"Processes", diff:"Beginner", xp:12,
+    title:"Lab 11 — top",
+    goal:"Run top and spot docker line",
+    why:"top helps you quickly see heavy processes.",
+    lesson:
+`top shows live CPU/memory usage.
+In this sim it prints a snapshot.`,
+    hint:"Try: top",
+    solution:"top",
+    validate: (ctx)=> ctx.did.topDocker
+  },
+
+  // Logs
+  { id:"l12", tag:"Logs", diff:"Intermediate", xp:16,
+    title:"Lab 12 — journalctl",
+    goal:"Run journalctl and observe failed ssh attempts",
+    why:"Logs tell the truth during security events.",
+    lesson:
+`journalctl is systemd logs viewer (real servers).
+Common:
+  journalctl -xe
+Here: journalctl`,
+    hint:"Try: journalctl",
+    solution:"journalctl",
+    validate: (ctx)=> ctx.did.journalFailed
+  },
+  { id:"l13", tag:"Logs", diff:"Intermediate", xp:16,
+    title:"Lab 13 — grep auth.log",
+    goal:"grep Failed in /var/log/auth.log",
+    why:"Classic way to confirm brute-force attempts.",
+    lesson:
+`Combine grep with auth logs to confirm brute force:
+  grep Failed /var/log/auth.log`,
+    hint:"Try: grep Failed /var/log/auth.log",
+    solution:"grep Failed /var/log/auth.log",
+    validate: (ctx)=> ctx.did.grepAuthFailed
+  },
+
+  // Pipes & Redirection
+  { id:"l14", tag:"Pipes", diff:"Advanced", xp:22,
+    title:"Lab 14 — Pipes (cat | grep)",
+    goal:"Filter ERROR from app.log using a pipe",
+    why:"Pipes let you chain tools like LEGO blocks.",
+    lesson:
+`Pipe sends output of left command into right command.
+Example:
+  cat app.log | grep ERROR`,
+    hint:"Try: cd ~/projects then: cat app.log | grep ERROR",
+    solution:"cd ~/projects\ncat app.log | grep ERROR",
+    validate: (ctx)=> ctx.did.pipeError
+  },
+  { id:"l15", tag:"Pipes", diff:"Advanced", xp:24,
+    title:"Lab 15 — Redirection (>, >>)",
+    goal:"Write note1 to ~/labs/redirection/notes.txt then append note2",
+    why:"Redirecting output is common in scripts & quick notes.",
+    lesson:
+`> overwrites, >> appends.
+Example:
+  echo note1 > notes.txt
+  echo note2 >> notes.txt`,
+    hint:"Try: echo note1 > ~/labs/redirection/notes.txt then echo note2 >> ...",
+    solution:"echo note1 > ~/labs/redirection/notes.txt\necho note2 >> ~/labs/redirection/notes.txt\ncat ~/labs/redirection/notes.txt",
+    validate: (ctx)=> ctx.did.redirNote1 && ctx.did.redirNote2
+  },
+
+  // Services (systemctl simulation)
+  { id:"l16", tag:"Services", diff:"Intermediate", xp:18,
+    title:"Lab 16 — systemctl status",
+    goal:"Check nginx service status",
+    why:"Knowing service state is crucial in ops.",
+    lesson:
+`systemctl manages services on systemd systems.
+Common:
+  systemctl status nginx
+  systemctl restart nginx`,
+    hint:"Try: systemctl status nginx",
+    solution:"systemctl status nginx",
+    validate: (ctx)=> ctx.did.systemctlStatus
+  },
+  { id:"l17", tag:"Services", diff:"Intermediate", xp:18,
+    title:"Lab 17 — systemctl restart",
+    goal:"Restart nginx service",
+    why:"Restarting safely is often a quick fix after changes.",
+    lesson:
+`Restart a service:
+  systemctl restart nginx`,
+    hint:"Try: systemctl restart nginx",
+    solution:"systemctl restart nginx",
+    validate: (ctx)=> ctx.did.systemctlRestart
+  },
+
+  // Network
+  { id:"l18", tag:"Network", diff:"Intermediate", xp:18,
+    title:"Lab 18 — ss ports",
+    goal:"List listening ports using ss -tulpen",
+    why:"Identify exposed services quickly.",
+    lesson:
+`ss shows socket stats (ports).
+Example:
+  ss -tulpen`,
+    hint:"Try: ss -tulpen",
+    solution:"ss -tulpen",
+    validate: (ctx)=> ctx.did.ssPorts
+  },
+  { id:"l19", tag:"Network", diff:"Intermediate", xp:18,
+    title:"Lab 19 — ip a",
+    goal:"Show IP addresses using ip a",
+    why:"Network troubleshooting starts with interface/IP checks.",
+    lesson:
+`ip a shows interfaces and IPs.
+Example:
+  ip a`,
+    hint:"Try: ip a",
+    solution:"ip a",
+    validate: (ctx)=> ctx.did.ipA
+  },
+  { id:"l20", tag:"Network", diff:"Beginner", xp:14,
+    title:"Lab 20 — ping",
+    goal:"Ping web01 (ping web01)",
+    why:"Confirm connectivity quickly.",
+    lesson:
+`ping checks reachability.
+In real servers you may use:
+  ping -c 3 web01
+Here: ping web01`,
+    hint:"Try: ping web01",
+    solution:"ping web01",
+    validate: (ctx)=> ctx.did.pingWeb01
+  },
+
+  // Archive (tar simulation)
+  { id:"l21", tag:"Archive", diff:"Advanced", xp:22,
+    title:"Lab 21 — tar backup",
+    goal:"Create archive of ~/projects into ~/labs/fs/archive/projects.tar.gz",
+    why:"Archives are common for backups and transfers.",
+    lesson:
+`tar creates archives.
+Example:
+  tar -czf out.tar.gz folder
+Here we simulate tar output and create a fake archive file.`,
+    hint:"Try: tar -czf ~/labs/fs/archive/projects.tar.gz ~/projects",
+    solution:"tar -czf ~/labs/fs/archive/projects.tar.gz ~/projects",
+    validate: (ctx)=> ctx.did.tarMade
+  },
+
+  // Disk / du
+  { id:"l22", tag:"Disk", diff:"Advanced", xp:22,
+    title:"Lab 22 — du investigate",
+    goal:"Use du -sh to find a large file in ~/projects",
+    why:"Disk-full incidents often start with du + cleanup.",
+    lesson:
+`du estimates disk usage.
+Common:
+  du -sh *
+In this sim:
+  du -sh ~/projects`,
+    hint:"Try: du -sh ~/projects",
+    solution:"du -sh ~/projects",
+    validate: (ctx)=> ctx.did.duProjects
+  },
+  { id:"l23", tag:"Disk", diff:"Advanced", xp:24,
+    title:"Lab 23 — cleanup big file",
+    goal:"Remove bigfile.bin from ~/projects",
+    why:"Safely cleaning big files can restore availability.",
+    lesson:
+`Remove files with rm (careful in real prod!).
+Example:
+  rm bigfile.bin`,
+    hint:"Try: cd ~/projects then rm bigfile.bin then ls",
+    solution:"cd ~/projects\nrm bigfile.bin\nls",
+    validate: (ctx)=> ctx.did.rmBigfile
+  },
+
+  // Cron
+  { id:"l24", tag:"Cron", diff:"Intermediate", xp:18,
+    title:"Lab 24 — crontab view",
+    goal:"View scheduled jobs (crontab -l)",
+    why:"Cron jobs can break systems or solve tasks automatically.",
+    lesson:
+`crontab -l shows current user's cron.
+Here we simulate it from ~/labs/cron/crontab.txt`,
+    hint:"Try: crontab -l",
+    solution:"crontab -l",
+    validate: (ctx)=> ctx.did.cronList
+  },
+  { id:"l25", tag:"Cron", diff:"Intermediate", xp:18,
+    title:"Lab 25 — grep cron job",
+    goal:"Find backup job line using grep in crontab output (use a pipe)",
+    why:"Realistically you often filter cron quickly.",
+    lesson:
+`Combine with pipe:
+  crontab -l | grep backup`,
+    hint:"Try: crontab -l | grep backup",
+    solution:"crontab -l | grep backup",
+    validate: (ctx)=> ctx.did.cronPipeGrep
+  },
+];
+
+const TAGS = ["All","Navigation","Text","Find","Permissions","Files","Processes","Logs","Pipes","Services","Network","Archive","Disk","Cron"];
+
+let currentLabId = state.lastLab || LABS[0].id;
+
+let did = {
+  lsInProjects:false, catHosts:false, grepError:false, tail3:false, wcWords:false,
+  findSecret:false, chmodClean:false, mkDemo:false, touchHello:false, cpNotes:false, mvNotes:false,
+  psDocker:false, topDocker:false, journalFailed:false, grepAuthFailed:false,
+  pipeError:false, redirNote1:false, redirNote2:false,
+  systemctlStatus:false, systemctlRestart:false,
+  ssPorts:false, ipA:false, pingWeb01:false,
+  tarMade:false, duProjects:false, rmBigfile:false,
+  cronList:false, cronPipeGrep:false
+};
+
+function getCurrentLab(){ return LABS.find(l=>l.id===currentLabId) || null; }
+
+/* ---------- UI ---------- */
+let activeTag = "All";
+let suggestItems = [];
+let suggestIndex = -1;
+
+function updateStatsUI(){
+  recomputeBadges();
+
+  const doneCount = state.done.size;
+  donePill.textContent = `${doneCount}/${LABS.length} Done`;
+  xpPill.textContent = `XP: ${state.xp}`;
+  badgePill.textContent = `Badges: ${state.badges.length}`;
+  levelPill.textContent = `Level: ${levelName(state.xp)}`;
+
+  const pct = Math.round((doneCount/LABS.length)*100);
+  barFill.style.width = pct + "%";
+
+  saveStore({
+    done: [...state.done],
+    xp: state.xp,
+    badges: state.badges,
+    lastLab: currentLabId
+  });
+
+  // Certificate unlock
+  certBtn.style.display = (doneCount === LABS.length) ? "inline-flex" : "none";
+}
+
+function renderFilters(){
+  filters.innerHTML = "";
+  TAGS.forEach(t=>{
+    const el = document.createElement("div");
+    el.className = "chip" + (t===activeTag ? " active":"");
+    el.textContent = t;
+    el.onclick = ()=>{
+      activeTag = t;
+      renderFilters();
+      renderLabList();
+    };
+    filters.appendChild(el);
+  });
+}
+
+function renderLabList(){
+  const q = (search.value || "").trim().toLowerCase();
+  labList.innerHTML = "";
+
+  const filtered = LABS.filter(l=>{
+    const tagOk = activeTag==="All" ? true : l.tag===activeTag;
+    const qOk = !q ? true : (
+      l.title.toLowerCase().includes(q) ||
+      l.goal.toLowerCase().includes(q) ||
+      l.tag.toLowerCase().includes(q) ||
+      (l.diff||"").toLowerCase().includes(q)
+    );
+    return tagOk && qOk;
+  });
+
+  filtered.forEach(l=>{
+    const el = document.createElement("div");
+    el.className = "lab" + (l.id===currentLabId ? " active":"");
+    const done = state.done.has(l.id);
+    el.innerHTML = `
+      <b>${done ? "✅ " : ""}${l.title}</b>
+      <small>${l.goal}</small>
+      <div class="miniRow">
+        <span class="pill">${l.tag}</span>
+        <span class="pill">${l.diff}</span>
+        <span class="pill good">+${l.xp} XP</span>
+      </div>
+    `;
+    el.onclick = ()=> selectLab(l.id, true);
+    labList.appendChild(el);
+  });
+
+  if(!filtered.length){
+    const empty = document.createElement("div");
+    empty.className = "lab";
+    empty.innerHTML = `<b>No labs found</b><small>Try another keyword.</small>`;
+    labList.appendChild(empty);
+  }
+}
+
+function setActiveTab(which){
+  document.querySelectorAll(".tab").forEach(t=>{
+    t.classList.toggle("active", t.dataset.tab===which);
+  });
+  lessonPanel.classList.toggle("show", which==="lesson");
+  hintPanel.classList.toggle("show", which==="hint");
+  solutionPanel.classList.toggle("show", which==="solution");
+}
+
+document.querySelectorAll(".tab").forEach(t=>{
+  t.addEventListener("click", ()=> setActiveTab(t.dataset.tab));
+});
+
+function updateLabDetails(){
+  const l = getCurrentLab();
+  if(!l) return;
+
+  labTitle.textContent = l.title;
+  labGoal.textContent = "Goal: " + l.goal;
+  labWhy.textContent = "Why it matters: " + l.why;
+
+  labTagPill.textContent = "Tag: " + l.tag;
+  labDiffPill.textContent = "Difficulty: " + l.diff;
+  labXpPill.textContent = "XP: +" + l.xp;
+
+  const done = state.done.has(l.id);
+  labStatusPill.textContent = done ? "Completed ✅" : "Not completed";
+  labStatusPill.className = "pill " + (done ? "good" : "warn");
+
+  lessonPanel.textContent = l.lesson || "";
+  hintPanel.textContent = l.hint || "";
+  solutionPanel.textContent = l.solution || "";
+
+  activeLabPill.textContent = "Lab: " + l.id.toUpperCase();
+  termStatusPill.textContent = done ? "Completed ✅" : "In progress";
+  termStatusPill.className = "pill " + (done ? "good" : "warn");
+
+  setActiveTab("lesson");
+}
+
+function selectLab(id, announce=false){
+  currentLabId = id;
+  renderLabList();
+  updateLabDetails();
+  setPathLabel();
+  updateStatsUI();
+
+  if(announce){
+    printLine("", "muted");
+    printLine("Switched lab → " + getCurrentLab().title, "ok");
+    printLine("Goal: " + getCurrentLab().goal, "muted");
+  }
+}
+
+/* ---------- Commands ---------- */
+const COMMANDS = [
+  "help","labs","status","hint","solution","clear","history",
+  "pwd","ls","cd","cat","head","tail","wc","grep","find",
+  "echo","touch","mkdir","rm","cp","mv","chmod",
+  "ps","top","journalctl","df","free","uname","whoami",
+  "systemctl","ss","ip","ping","tar","du","crontab"
+];
+
 function cmd_ls(pathArg){
   const target = pathArg ? norm(pathArg) : cwd;
   const node = getNode(target);
   if(!node) return {ok:false, msg:`ls: cannot access '${pathArg}': No such file or directory`};
   if(node.type!=="dir") return {ok:false, msg:`ls: cannot open directory '${pathArg}': Not a directory`};
-  return {ok:true, msg: Object.keys(node.kids).sort().join("  ")};
+  return {ok:true, msg:Object.keys(node.kids).sort().join("  ")};
 }
 function cmd_cd(pathArg){
   const target = norm(pathArg || "~");
@@ -778,34 +1342,34 @@ function cmd_cd(pathArg){
   cwd = target;
   return {ok:true, msg:""};
 }
-function cmd_cat(fileArg){
-  if(!fileArg) return {ok:false, msg:"cat: missing file operand"};
-  const f = ensureFile(fileArg);
+function cmd_cat(pathArg){
+  if(!pathArg) return {ok:false, msg:"cat: missing file operand"};
+  const f = ensureFile(pathArg);
   if(!f){
-    const n = getNode(fileArg);
-    if(n && n.type==="dir") return {ok:false, msg:`cat: ${fileArg}: Is a directory`};
-    return {ok:false, msg:`cat: ${fileArg}: No such file or directory`};
+    const n = getNode(pathArg);
+    if(n && n.type==="dir") return {ok:false, msg:`cat: ${pathArg}: Is a directory`};
+    return {ok:false, msg:`cat: ${pathArg}: No such file or directory`};
   }
-  return {ok:true, msg: f.data};
+  return {ok:true, msg:f.data};
 }
-function cmd_head(fileArg, n=10){
-  const f = ensureFile(fileArg);
-  if(!f) return {ok:false, msg:`head: cannot open '${fileArg}'`};
-  return {ok:true, msg: f.data.split("\n").slice(0,n).join("\n")};
+function cmd_head(pathArg, n=10){
+  const f = ensureFile(pathArg);
+  if(!f) return {ok:false, msg:`head: cannot open '${pathArg}'`};
+  return {ok:true, msg:f.data.split("\n").slice(0,n).join("\n")};
 }
-function cmd_tail(fileArg, n=10){
-  const f = ensureFile(fileArg);
-  if(!f) return {ok:false, msg:`tail: cannot open '${fileArg}'`};
+function cmd_tail(pathArg, n=10){
+  const f = ensureFile(pathArg);
+  if(!f) return {ok:false, msg:`tail: cannot open '${pathArg}'`};
   const lines = f.data.split("\n");
-  return {ok:true, msg: lines.slice(Math.max(0, lines.length-n)).join("\n")};
+  return {ok:true, msg:lines.slice(Math.max(0, lines.length-n)).join("\n")};
 }
-function cmd_wc(fileArg){
-  const f = ensureFile(fileArg);
-  if(!f) return {ok:false, msg:`wc: ${fileArg}: No such file or directory`};
+function cmd_wc(pathArg){
+  const f = ensureFile(pathArg);
+  if(!f) return {ok:false, msg:`wc: ${pathArg}: No such file or directory`};
   const lines = f.data.length ? f.data.split("\n").length : 0;
   const words = f.data.trim().length ? f.data.trim().split(/\s+/).length : 0;
   const bytes = new TextEncoder().encode(f.data).length;
-  return {ok:true, msg:`${lines} ${words} ${bytes} ${fileArg}`};
+  return {ok:true, msg:`${lines} ${words} ${bytes} ${pathArg}`};
 }
 function cmd_grep(pattern, fileArg, inputText=null){
   if(!pattern) return {ok:false, msg:"grep: missing pattern"};
@@ -819,7 +1383,7 @@ function cmd_grep(pattern, fileArg, inputText=null){
   }
   const re = new RegExp(pattern.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
   const lines = text.split("\n").filter(l=>re.test(l));
-  return {ok:true, msg: lines.join("\n")};
+  return {ok:true, msg:lines.join("\n")};
 }
 function cmd_find(base, flag, name){
   if(!base || flag !== "-name" || !name) return {ok:false, msg:"find: usage: find <path> -name <filename>"};
@@ -831,7 +1395,7 @@ function cmd_find(base, flag, name){
     const leaf = p.split("/").pop();
     if(leaf === name) matches.push(p.replace("/home/imran","~"));
   });
-  return {ok:true, msg: matches.join("\n")};
+  return {ok:true, msg:matches.join("\n")};
 }
 function cmd_touch(fileArg){
   if(!fileArg) return {ok:false, msg:"touch: missing file operand"};
@@ -861,639 +1425,55 @@ function cmd_chmod(mode, fileArg){
   f.executable = true;
   return {ok:true, msg:""};
 }
-
-// Simulated services status
-let services = {
-  nginx: {active:true},
-  docker: {active:true},
-  sshd: {active:true},
-};
-function cmd_systemctl(action, name){
-  if(!action) return {ok:false, msg:"systemctl: missing action (status/start/stop/restart)"};
-  if(!name && action !== "list-units") return {ok:false, msg:"systemctl: missing unit name (ex: nginx)"};
-
-  if(action === "list-units"){
-    const rows = Object.keys(services).map(s=>{
-      const a = services[s].active ? "active (running)" : "inactive (dead)";
-      return `${s}.service  loaded  ${a}`;
-    }).join("\n");
-    return {ok:true, msg: rows};
-  }
-
-  const key = name.replace(".service","");
-  if(!services[key]) return {ok:false, msg:`systemctl: unit ${name} not found`};
-
-  if(action==="status"){
-    const a = services[key].active ? "active (running)" : "inactive (dead)";
-    return {ok:true, msg:`● ${key}.service - ${key}\n   Loaded: loaded (/usr/lib/systemd/system/${key}.service)\n   Active: ${a}`};
-  }
-  if(action==="start"){ services[key].active = true; return {ok:true, msg:""}; }
-  if(action==="stop"){ services[key].active = false; return {ok:true, msg:""}; }
-  if(action==="restart"){ services[key].active = true; return {ok:true, msg:""}; }
-
-  return {ok:false, msg:`systemctl: unknown action '${action}'`};
+function cmd_du(pathArg){
+  // simple heuristic sizes
+  const p = norm(pathArg || cwd);
+  const node = getNode(p);
+  if(!node) return {ok:false, msg:`du: cannot access '${pathArg}': No such file or directory`};
+  // compute pseudo size
+  let size = 0;
+  walk(p, node, (pp, nn)=>{
+    if(nn.type==="file") size += (nn.data ? nn.data.length : 0);
+  });
+  // scale
+  const kb = Math.max(1, Math.round(size/1024));
+  const mb = Math.round(kb/1024);
+  const label = mb >= 1 ? `${mb}M` : `${kb}K`;
+  return {ok:true, msg:`${label}\t${p.replace("/home/imran","~")}`};
 }
 
-// tar simulation
-function cmd_tar(flag, outFile, folder){
-  if(flag !== "-czf" || !outFile || !folder) return {ok:false, msg:"tar: usage: tar -czf <archive.tar.gz> <folder>"};
-  const dir = ensureDir(folder);
-  if(!dir) return {ok:false, msg:`tar: ${folder}: Cannot open: No such file or directory`};
-  const listing = [];
-  walk(norm(folder), dir, (p,n)=>{ if(n.type==="file") listing.push(p.replace("/home/imran","~")); });
-  const content = `# Archive: ${outFile}\n# Contains:\n` + listing.join("\n") + "\n";
-  const res = writeFile(outFile, content, false);
-  return res.ok ? {ok:true, msg:""} : {ok:false, msg:res.msg};
-}
+/* --- Simulated service/network outputs --- */
+let serviceState = { nginx: "active (running)" };
 
-// ping/curl simulation
-function cmd_ping(host){
-  if(!host) return {ok:false, msg:"ping: usage: ping <host>"};
-  if(host==="web01" || host==="10.0.0.10"){
-    return {ok:true, msg:`PING ${host} (10.0.0.10): 56 data bytes\n64 bytes from 10.0.0.10: icmp_seq=1 ttl=64 time=1.2 ms\n64 bytes from 10.0.0.10: icmp_seq=2 ttl=64 time=1.1 ms\n--- ${host} ping statistics ---\n2 packets transmitted, 2 received, 0% packet loss`};
-  }
-  return {ok:true, msg:`PING ${host}: host unreachable (simulated)`};
-}
-function cmd_curl(url){
-  if(!url) return {ok:false, msg:"curl: usage: curl <url>"};
-  if(url.includes("http")){
-    return {ok:true, msg:`HTTP/1.1 200 OK\nserver: nginx\ncontent-type: text/plain\n\nHello from ${url} (simulated)`};
-  }
-  return {ok:false, msg:"curl: invalid URL"};
-}
-
-// cron simulation
-function cmd_crontab(arg){
-  // support: crontab -l | crontab -e (prints instruction)
-  if(arg === "-l"){
-    const f = ensureFile("~/labs/cron/crontab.txt");
-    return {ok:true, msg: f ? f.data : "# (empty)\n"};
-  }
-  if(arg === "-e"){
-    return {ok:true, msg:"(simulation) Use: echo '*/5 * * * * /usr/bin/backup' >> ~/labs/cron/crontab.txt"};
-  }
-  return {ok:false, msg:"crontab: usage: crontab -l | crontab -e"};
-}
-
-// help
 function showHelp(){
   printLine("Supported commands (simulation):", "muted");
-  printLine("  help, labs, status, lesson, hint, solution, clear, history", "muted");
+  printLine("  help, labs, status, hint, solution, clear, history", "muted");
   printLine("  pwd, ls [path], cd <path>, cat <file>, head <file> [n], tail <file> [n], wc <file>", "muted");
   printLine("  grep <pattern> <file>, find <path> -name <file>", "muted");
   printLine("  echo <text>, touch <file>, mkdir <dir>, rm <path>, cp <src> <dst>, mv <src> <dst>", "muted");
-  printLine("  chmod +x <file>, ps, top, journalctl, df -h, df -i, free -m, uname -a, whoami", "muted");
-  printLine("  systemctl <status|start|stop|restart> <name>, systemctl list-units", "muted");
-  printLine("  tar -czf <archive.tar.gz> <folder>, ping <host>, curl <url>, crontab -l / -e", "muted");
-  printLine("Pipes / Redirection:", "muted");
+  printLine("  chmod +x <file>, du -sh <path>", "muted");
+  printLine("  ps, top, journalctl, df -h, free -m, uname -a, whoami", "muted");
+  printLine("  systemctl status|restart <svc>, ss -tulpen, ip a, ping <host>, tar -czf <out> <src>, crontab -l", "muted");
+  printLine("Pipes and redirection:", "muted");
   printLine("  cat file | grep ERROR", "muted");
-  printLine("  echo hello > file.txt   (overwrite)   /   echo hi >> file.txt (append)", "muted");
+  printLine("  echo hello > file.txt   (overwrite)", "muted");
+  printLine("  echo hi >> file.txt     (append)", "muted");
 }
-
-// System info
-function sys_df_h(){
-  return `Filesystem      Size  Used Avail Use% Mounted on\n/dev/simdisk      50G   17G   31G  36% /`;
+function showStatus(){
+  const lab = getCurrentLab();
+  printLine(`Active lab: ${lab ? lab.title : "-"}`, "muted");
+  printLine(`Goal: ${lab ? lab.goal : "-"}`, "muted");
+  printLine(`Completed: ${state.done.size}/${LABS.length} • XP: ${state.xp} • Badges: ${state.badges.length}`, "muted");
 }
-function sys_df_i(){
-  // inode simulation
-  return `Filesystem       Inodes  IUsed   IFree IUse% Mounted on\n/dev/simdisk     200000  58000  142000   29% /`;
-}
-function sys_free_m(){
-  return `              total        used        free      shared  buff/cache   available\nMem:           8192        1970        4022         210        2200        5900`;
-}
-function sys_journalctl(){
-  return `-- Logs begin at Mon 2025-01-01 00:00:00 IST, end at Tue 2025-01-02 12:00:00 IST. --\nJan 02 10:20:01 web01 sshd[123]: Failed password for invalid user test\nJan 02 10:20:05 web01 sshd[123]: Failed password for invalid user root\nJan 02 10:21:15 web01 sshd[123]: Accepted password for imran`;
-}
-function sys_ps(){
-  return ` PID TTY      TIME     CMD\n 101 pts/0    00:00:01 nginx\n 202 pts/0    00:00:00 sshd\n 303 pts/0    00:00:02 docker\n 404 pts/0    00:00:01 python\n 505 pts/0    00:00:01 node`;
-}
-function sys_top(){
-  return `top - 12:00:00 up 10 days,  2 users,  load average: 0.42, 0.36, 0.31\n%Cpu(s):  7.2 us,  1.1 sy,  0.0 ni, 91.3 id\nMiB Mem :   8192.0 total,   4022.0 free,   1970.0 used,   2200.0 buff/cache\n  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND\n  303 root      20   0  123456  22120   9892 S   3.2   0.3   0:11.2 docker`;
-}
-
-/**********************
- * Labs + XP + Badges
- **********************/
-const TAGS = ["All","Navigation","Text","Find","Permissions","Files","Processes","Logs","Pipes","Services","Backup","Network","Cron","Disk"];
-let activeTag = "All";
-
-const STORE = loadStore();
-let state = {
-  done: new Set(STORE.done || []),
-  xp: Number(STORE.xp || 0),
-  badges: Array.isArray(STORE.badges) ? STORE.badges : [],
-  lastLab: STORE.lastLab || null,
-};
-
-function levelName(xp){
-  if(xp < 60) return "Newbie";
-  if(xp < 160) return "Apprentice";
-  if(xp < 300) return "Operator";
-  if(xp < 460) return "Engineer";
-  return "Master";
-}
-
-const LABS = [
-  // 1-5 basics/text
-  { id:"l1", tag:"Navigation", diff:"Beginner", xp:10,
-    title:"Lab 1 — Navigation Basics",
-    goal:"Go to ~/projects and list files.",
-    why:"Every Linux task starts with navigation and listing.",
-    lesson:`Concept: cd + ls\nSteps:\n1) cd ~/projects\n2) ls\nExpected:\nYou should see: app.log  deploy.sh  notes.md`,
-    hint:"Try: cd projects  then: ls",
-    solution:"cd ~/projects\nls",
-    validate: (did)=> did.lsInProjects
-  },
-  { id:"l2", tag:"Navigation", diff:"Beginner", xp:10,
-    title:"Lab 2 — Absolute Paths",
-    goal:"Open /etc/hosts using cat.",
-    why:"Absolute paths reduce mistakes in production.",
-    lesson:`Concept: Absolute paths\nSteps:\n1) cat /etc/hosts\nExpected:\nYou should see localhost and web01/web02 entries.`,
-    hint:"Try: cat /etc/hosts",
-    solution:"cat /etc/hosts",
-    validate: (did)=> did.catHosts
-  },
-  { id:"l3", tag:"Text", diff:"Beginner", xp:12,
-    title:"Lab 3 — grep Errors",
-    goal:"Find ERROR lines in ~/labs/text/server.log",
-    why:"Fast log filtering helps during incidents.",
-    lesson:`Concept: grep pattern file\nSteps:\n1) grep ERROR ~/labs/text/server.log\nExpected:\nTwo ERROR lines should show.`,
-    hint:"Try: grep ERROR ~/labs/text/server.log",
-    solution:"grep ERROR ~/labs/text/server.log",
-    validate: (did)=> did.grepError
-  },
-  { id:"l4", tag:"Text", diff:"Intermediate", xp:14,
-    title:"Lab 4 — tail last lines",
-    goal:"Show last 3 lines of ~/projects/app.log",
-    why:"Tail shows the latest errors quickly.",
-    lesson:`Concept: tail\nSteps:\n1) cd ~/projects\n2) tail app.log 3\nExpected:\nYou should see the final 3 lines including ERROR disk full and shutdown.`,
-    hint:"Try: cd ~/projects then tail app.log 3",
-    solution:"cd ~/projects\ntail app.log 3",
-    validate: (did)=> did.tail3
-  },
-  { id:"l5", tag:"Text", diff:"Intermediate", xp:14,
-    title:"Lab 5 — wc basics",
-    goal:"Count lines/words/bytes in ~/labs/text/words.txt",
-    why:"Useful for quick checks on file size/content.",
-    lesson:`Concept: wc\nSteps:\n1) wc ~/labs/text/words.txt\nExpected:\nOutput shows line/word/byte counts.`,
-    hint:"Try: wc ~/labs/text/words.txt",
-    solution:"wc ~/labs/text/words.txt",
-    validate: (did)=> did.wcWords
-  },
-
-  // 6 find
-  { id:"l6", tag:"Find", diff:"Intermediate", xp:16,
-    title:"Lab 6 — find secret file",
-    goal:"Find secret.txt under ~/labs/fs",
-    why:"Finding lost files is common in troubleshooting.",
-    lesson:`Concept: find path -name file\nSteps:\n1) find ~/labs/fs -name secret.txt\nExpected:\nYou should get a path ending in secret.txt`,
-    hint:"Try: find ~/labs/fs -name secret.txt",
-    solution:"find ~/labs/fs -name secret.txt",
-    validate: (did)=> did.findSecret
-  },
-
-  // 7 permissions
-  { id:"l7", tag:"Permissions", diff:"Intermediate", xp:16,
-    title:"Lab 7 — chmod +x",
-    goal:"Make ~/projects/deploy.sh executable",
-    why:"Scripts often fail because execute permission is missing.",
-    lesson:`Concept: chmod +x file\nSteps:\n1) chmod +x ~/projects/deploy.sh\nExpected:\nNo output means success.`,
-    hint:"Try: chmod +x ~/projects/deploy.sh",
-    solution:"chmod +x ~/projects/deploy.sh",
-    validate: (did)=> did.chmodDeploy
-  },
-
-  // 8-10 file ops
-  { id:"l8", tag:"Files", diff:"Intermediate", xp:16,
-    title:"Lab 8 — mkdir + touch",
-    goal:"Create folder ~/labs/fs/tmp/demo and file hello.txt inside it",
-    why:"You create folders/files constantly in ops work.",
-    lesson:`Concept: mkdir + touch\nSteps:\n1) mkdir ~/labs/fs/tmp/demo\n2) touch ~/labs/fs/tmp/demo/hello.txt\nExpected:\nNo output, and file exists.`,
-    hint:"Try: mkdir ... then touch ...",
-    solution:"mkdir ~/labs/fs/tmp/demo\ntouch ~/labs/fs/tmp/demo/hello.txt\nls ~/labs/fs/tmp/demo",
-    validate: (did)=> did.mkDemo && did.touchHello
-  },
-  { id:"l9", tag:"Files", diff:"Intermediate", xp:16,
-    title:"Lab 9 — cp and mv",
-    goal:"Copy ~/projects/notes.md to ~/labs/fs/tmp/notes-copy.md then move to notes-moved.md",
-    why:"Safe file operations matter a lot in production.",
-    lesson:`Concept: cp src dst + mv old new\nSteps:\n1) cp ~/projects/notes.md ~/labs/fs/tmp/notes-copy.md\n2) mv ~/labs/fs/tmp/notes-copy.md ~/labs/fs/tmp/notes-moved.md\nExpected:\nNo output, file renamed.`,
-    hint:"Try: cp ... then mv ...",
-    solution:"cp ~/projects/notes.md ~/labs/fs/tmp/notes-copy.md\nmv ~/labs/fs/tmp/notes-copy.md ~/labs/fs/tmp/notes-moved.md\nls ~/labs/fs/tmp",
-    validate: (did)=> did.cpNotes && did.mvNotes
-  },
-  { id:"l10", tag:"Files", diff:"Beginner", xp:12,
-    title:"Lab 10 — Create and append notes (redirection)",
-    goal:"Write note1 to ~/labs/redirection/notes.txt then append note2",
-    why:"Redirection is a key Linux skill.",
-    lesson:`Concept: > and >>\nSteps:\n1) echo note1 > ~/labs/redirection/notes.txt\n2) echo note2 >> ~/labs/redirection/notes.txt\n3) cat ~/labs/redirection/notes.txt\nExpected:\nnotes.txt shows note1 then note2.`,
-    hint:"Try: echo note1 > ... then echo note2 >> ...",
-    solution:"echo note1 > ~/labs/redirection/notes.txt\necho note2 >> ~/labs/redirection/notes.txt\ncat ~/labs/redirection/notes.txt",
-    validate: (did)=> did.redirNote1 && did.redirNote2
-  },
-
-  // 11-12 processes/logs
-  { id:"l11", tag:"Processes", diff:"Beginner", xp:12,
-    title:"Lab 11 — ps (find docker)",
-    goal:"Run ps and confirm docker exists",
-    why:"Process checks are core to incident response.",
-    lesson:`Concept: ps\nSteps:\n1) ps\nExpected:\nYou should see docker listed.`,
-    hint:"Try: ps",
-    solution:"ps",
-    validate: (did)=> did.psDocker
-  },
-  { id:"l12", tag:"Processes", diff:"Beginner", xp:12,
-    title:"Lab 12 — top (spot docker)",
-    goal:"Run top and spot docker line",
-    why:"top helps identify resource-heavy services quickly.",
-    lesson:`Concept: top\nSteps:\n1) top\nExpected:\ndocker appears in output.`,
-    hint:"Try: top",
-    solution:"top",
-    validate: (did)=> did.topDocker
-  },
-  { id:"l13", tag:"Logs", diff:"Intermediate", xp:16,
-    title:"Lab 13 — journalctl SSH failures",
-    goal:"Use journalctl and identify 'Failed password' logs",
-    why:"Quickly verifying brute force is important.",
-    lesson:`Concept: journalctl\nSteps:\n1) journalctl\nExpected:\nYou should see Failed password lines.`,
-    hint:"Try: journalctl",
-    solution:"journalctl",
-    validate: (did)=> did.journalFailed
-  },
-  { id:"l14", tag:"Logs", diff:"Intermediate", xp:16,
-    title:"Lab 14 — grep auth.log",
-    goal:"grep Failed in /var/log/auth.log",
-    why:"Classic evidence for brute-force attempts.",
-    lesson:`Concept: grep in auth logs\nSteps:\n1) grep Failed /var/log/auth.log\nExpected:\nTwo Failed password lines show.`,
-    hint:"Try: grep Failed /var/log/auth.log",
-    solution:"grep Failed /var/log/auth.log",
-    validate: (did)=> did.grepAuthFailed
-  },
-
-  // 15 pipes
-  { id:"l15", tag:"Pipes", diff:"Advanced", xp:22,
-    title:"Lab 15 — Pipes (cat | grep)",
-    goal:"Filter ERROR from app.log using a pipe",
-    why:"Pipes let you chain tools like a pro.",
-    lesson:`Concept: piping output\nSteps:\n1) cd ~/projects\n2) cat app.log | grep ERROR\nExpected:\nOnly ERROR lines appear.`,
-    hint:"Try: cd ~/projects then cat app.log | grep ERROR",
-    solution:"cd ~/projects\ncat app.log | grep ERROR",
-    validate: (did)=> did.pipeError
-  },
-
-  // 16 services
-  { id:"l16", tag:"Services", diff:"Intermediate", xp:18,
-    title:"Lab 16 — systemctl status",
-    goal:"Check status of nginx via systemctl",
-    why:"Most Linux servers use systemd services.",
-    lesson:`Concept: systemctl status\nSteps:\n1) systemctl status nginx\nExpected:\nActive: active (running)`,
-    hint:"Try: systemctl status nginx",
-    solution:"systemctl status nginx",
-    validate: (did)=> did.systemctlStatus
-  },
-  { id:"l17", tag:"Services", diff:"Advanced", xp:22,
-    title:"Lab 17 — restart a service",
-    goal:"Restart nginx using systemctl restart",
-    why:"Restarting services safely is common during incident resolution.",
-    lesson:`Concept: systemctl restart\nSteps:\n1) systemctl restart nginx\n2) systemctl status nginx\nExpected:\nnginx stays active.`,
-    hint:"Try: systemctl restart nginx",
-    solution:"systemctl restart nginx\nsystemctl status nginx",
-    validate: (did)=> did.systemctlRestart
-  },
-
-  // 18 backup/tar
-  { id:"l18", tag:"Backup", diff:"Advanced", xp:24,
-    title:"Lab 18 — Create backup archive (tar)",
-    goal:"Create archive.tar.gz from ~/labs/archive/logs",
-    why:"Backups and packaging logs are frequent tasks.",
-    lesson:`Concept: tar -czf\nSteps:\n1) tar -czf ~/labs/archive/archive.tar.gz ~/labs/archive/logs\n2) cat ~/labs/archive/archive.tar.gz\nExpected:\nArchive file lists included logs.`,
-    hint:"Try: tar -czf <out> <folder>",
-    solution:"tar -czf ~/labs/archive/archive.tar.gz ~/labs/archive/logs\ncat ~/labs/archive/archive.tar.gz",
-    validate: (did)=> did.tarMade
-  },
-
-  // 19 network
-  { id:"l19", tag:"Network", diff:"Intermediate", xp:18,
-    title:"Lab 19 — Basic network checks",
-    goal:"Ping web01 then curl a URL",
-    why:"Basic reachability + HTTP checks are essential.",
-    lesson:`Concept: ping + curl\nSteps:\n1) ping web01\n2) curl https://example.com\nExpected:\nPing replies and curl returns 200 OK (simulated).`,
-    hint:"Try: ping web01 then curl https://example.com",
-    solution:"ping web01\ncurl https://example.com",
-    validate: (did)=> did.pingOk && did.curlOk
-  },
-
-  // 20 disk/inodes/cron
-  { id:"l20", tag:"Disk", diff:"Intermediate", xp:18,
-    title:"Lab 20 — Disk & inode checks",
-    goal:"Run df -h and df -i",
-    why:"You must check both disk space and inode usage.",
-    lesson:`Concept: disk vs inodes\nSteps:\n1) df -h\n2) df -i\nExpected:\nBoth outputs display filesystem usage.`,
-    hint:"Try: df -h and df -i",
-    solution:"df -h\ndf -i",
-    validate: (did)=> did.dfH && did.dfI
-  },
-];
-
-function getLab(id){ return LABS.find(l=>l.id===id); }
-let currentLabId = state.lastLab || LABS[0].id;
-
-// Per-session flags
-let did = {
-  lsInProjects:false,
-  catHosts:false,
-  grepError:false,
-  tail3:false,
-  wcWords:false,
-  findSecret:false,
-  chmodDeploy:false,
-  mkDemo:false,
-  touchHello:false,
-  cpNotes:false,
-  mvNotes:false,
-  redirNote1:false,
-  redirNote2:false,
-  psDocker:false,
-  topDocker:false,
-  journalFailed:false,
-  grepAuthFailed:false,
-  pipeError:false,
-  systemctlStatus:false,
-  systemctlRestart:false,
-  tarMade:false,
-  pingOk:false,
-  curlOk:false,
-  dfH:false,
-  dfI:false,
-};
-
-// Badges
-function recomputeBadges(){
-  const b = new Set(state.badges);
-  const doneCount = state.done.size;
-  const hasTag = (tag)=> LABS.filter(x=>x.tag===tag).every(x=>state.done.has(x.id));
-
-  if(doneCount >= 1) b.add("First Blood");
-  if(doneCount >= 5) b.add("Command Runner");
-  if(doneCount >= 10) b.add("Ops Warrior");
-  if(doneCount >= 15) b.add("Linux Pro");
-  if(doneCount >= 20) b.add("Linux Hero");
-
-  if(hasTag("Navigation")) b.add("Navigator");
-  if(hasTag("Text")) b.add("Text Ninja");
-  if(hasTag("Permissions")) b.add("Permission Master");
-  if(hasTag("Pipes")) b.add("Pipeline Pro");
-  if(hasTag("Services")) b.add("Service Tamer");
-
-  state.badges = [...b].sort();
-}
-
-function updateStatsUI(){
-  const doneCount = state.done.size;
-  const total = LABS.length;
-
-  donePill.textContent = `${doneCount}/${total} Done`;
-  xpPill.textContent = `XP: ${state.xp}`;
-  badgePill.textContent = `Badges: ${state.badges.length}`;
-  levelPill.textContent = `Level: ${levelName(state.xp)}`;
-
-  barFill.style.width = Math.round((doneCount/total)*100) + "%";
-
-  saveStore({
-    done: [...state.done],
-    xp: state.xp,
-    badges: state.badges,
-    lastLab: currentLabId
+function showLabs(){
+  printLine("Labs:", "muted");
+  LABS.forEach(l=>{
+    const done = state.done.has(l.id) ? "✅" : "•";
+    printLine(`  ${done} [${l.tag}] ${l.title}`, "muted");
   });
 }
 
-function renderFilters(){
-  filters.innerHTML = "";
-  TAGS.forEach(t=>{
-    const el = document.createElement("div");
-    el.className = "chip" + (t===activeTag ? " active":"");
-    el.textContent = t;
-    el.onclick = ()=>{ activeTag = t; renderFilters(); renderLabList(); };
-    filters.appendChild(el);
-  });
-}
-
-function renderLabList(){
-  const q = (search.value || "").trim().toLowerCase();
-  labList.innerHTML = "";
-
-  const filtered = LABS.filter(l=>{
-    const tagOk = activeTag==="All" ? true : l.tag===activeTag;
-    const qOk = !q ? true : (
-      l.title.toLowerCase().includes(q) ||
-      l.goal.toLowerCase().includes(q) ||
-      l.tag.toLowerCase().includes(q) ||
-      l.diff.toLowerCase().includes(q)
-    );
-    return tagOk && qOk;
-  });
-
-  filtered.forEach(l=>{
-    const done = state.done.has(l.id);
-    const el = document.createElement("div");
-    el.className = "lab" + (l.id===currentLabId ? " active":"");
-    el.innerHTML = `
-      <b>${done ? "✅ " : ""}${l.title}</b>
-      <small>${l.goal}</small>
-      <div class="miniRow">
-        <span class="pill">${l.tag}</span>
-        <span class="pill">${l.diff}</span>
-        <span class="pill good">+${l.xp} XP</span>
-      </div>
-    `;
-    el.onclick = ()=> selectLab(l.id, true);
-    labList.appendChild(el);
-  });
-
-  if(!filtered.length){
-    const empty = document.createElement("div");
-    empty.className = "lab";
-    empty.innerHTML = `<b>No labs found</b><small>Try another keyword.</small>`;
-    labList.appendChild(empty);
-  }
-}
-
-function updateLabDetails(){
-  const l = getLab(currentLabId);
-  if(!l) return;
-
-  labTitle.textContent = l.title;
-  labGoal.textContent = "Goal: " + l.goal;
-  labWhy.textContent = "Why it matters: " + l.why;
-
-  labDiffPill.textContent = "Difficulty: " + l.diff;
-  labXpPill.textContent = "XP: +" + l.xp;
-
-  const done = state.done.has(l.id);
-  labStatusPill.textContent = done ? "Completed ✅" : "Not completed";
-  labStatusPill.className = "pill " + (done ? "good" : "warn");
-
-  lessonBox.textContent = l.lesson;
-  hintBox.textContent = l.hint;
-  solutionBox.textContent = l.solution;
-
-  showLesson.checked = false;
-  showHint.checked = false;
-  showSolution.checked = false;
-  lessonBox.classList.remove("show");
-  hintBox.classList.remove("show");
-  solutionBox.classList.remove("show");
-
-  activeLabPill.textContent = "Lab: " + l.id.toUpperCase();
-  termStatusPill.textContent = done ? "Completed ✅" : "In progress";
-  termStatusPill.className = "pill " + (done ? "good" : "warn");
-}
-
-function selectLab(id, announce=false){
-  currentLabId = id;
-  renderFilters();
-  renderLabList();
-  updateLabDetails();
-  updateStatsUI();
-  setPathLabel();
-
-  if(announce){
-    printLine("", "muted");
-    printLine("Switched lab → " + getLab(currentLabId).title, "ok");
-    printLine("Goal: " + getLab(currentLabId).goal, "muted");
-  }
-}
-
-showLesson.addEventListener("change", ()=> lessonBox.classList.toggle("show", showLesson.checked));
-showHint.addEventListener("change", ()=> hintBox.classList.toggle("show", showHint.checked));
-showSolution.addEventListener("change", ()=> solutionBox.classList.toggle("show", showSolution.checked));
-
-startLabBtn.addEventListener("click", ()=>{
-  const l = getLab(currentLabId);
-  printLine("", "muted");
-  printLine("Starting: " + l.title, "ok");
-  printLine("Goal: " + l.goal, "muted");
-  printLine("Use: lesson | hint | solution | status", "muted");
-  input.focus();
-});
-
-copyGoalBtn.addEventListener("click", async ()=>{
-  const l = getLab(currentLabId);
-  try{
-    await navigator.clipboard.writeText(l.solution);
-    printLine("📋 Copied solution to clipboard.", "ok");
-  } catch {
-    printLine("Clipboard blocked. Copy manually from Solution box.", "warnText");
-  }
-});
-
-/**********************
- * Autocomplete + Tab completion
- **********************/
-const COMMANDS = [
-  "help","labs","status","lesson","hint","solution","clear","history",
-  "pwd","ls","cd","cat","head","tail","wc","grep","find",
-  "echo","touch","mkdir","rm","cp","mv","chmod",
-  "ps","top","journalctl","df","free","uname","whoami",
-  "systemctl","tar","ping","curl","crontab"
-];
-
-function collectPaths(prefix){
-  // Suggest directories/files based on current FS and prefix path
-  // prefix can be like "~/pro" or "/var/l"
-  const expanded = (prefix || "").trim();
-  let base = expanded;
-  let dir = cwd;
-  let partial = "";
-
-  // if contains slash, split dir and partial
-  const lastSlash = expanded.lastIndexOf("/");
-  if(expanded.includes("/")){
-    const maybeDir = expanded.slice(0, lastSlash+1);
-    partial = expanded.slice(lastSlash+1);
-    dir = norm(maybeDir);
-  } else {
-    partial = expanded;
-    dir = cwd;
-  }
-
-  const dirNode = ensureDir(dir);
-  if(!dirNode) return [];
-  const names = Object.keys(dirNode.kids).sort();
-  const matches = names.filter(n => n.startsWith(partial));
-  const prefixDirShown = expanded.includes("/") ? expanded.slice(0,lastSlash+1) : "";
-  return matches.map(m => prefixDirShown + m);
-}
-
-function buildSuggestions(){
-  const raw = input.value || "";
-  const parts = raw.split(" ");
-  const first = parts[0] || "";
-  const last = parts[parts.length-1] || "";
-  const hasSpace = raw.includes(" ");
-
-  let suggestions = [];
-
-  if(!hasSpace){
-    suggestions = COMMANDS.filter(c=>c.startsWith(first)).slice(0,8);
-  } else {
-    // suggest paths for commands that take files/dirs
-    const cmd = first;
-    if(["cd","ls","cat","head","tail","wc","grep","find","touch","mkdir","rm","cp","mv","chmod","tar"].includes(cmd)){
-      suggestions = collectPaths(last.replace(/["']/g,"")).slice(0,8);
-    }
-  }
-
-  acItems = suggestions;
-  acIndex = 0;
-  renderAC();
-}
-
-function renderAC(){
-  if(!acItems.length){
-    ac.classList.remove("show");
-    ac.innerHTML = "";
-    return;
-  }
-  ac.classList.add("show");
-  ac.innerHTML = acItems.map((t,i)=>`
-    <div class="acItem ${i===acIndex?"active":""}" data-i="${i}">${t}</div>
-  `).join("") + `<div class="acHint">Tab to complete • ↑/↓ to select • Enter to run</div>`;
-
-  ac.querySelectorAll(".acItem").forEach(el=>{
-    el.onclick = ()=>{
-      acIndex = Number(el.dataset.i);
-      applyCompletion();
-    };
-  });
-}
-
-function applyCompletion(){
-  if(!acItems.length) return;
-  const pick = acItems[acIndex];
-
-  const raw = input.value || "";
-  const parts = raw.split(" ");
-  if(parts.length <= 1){
-    input.value = pick;
-  } else {
-    // replace last token
-    parts[parts.length-1] = pick;
-    input.value = parts.join(" ");
-  }
-  ac.classList.remove("show");
-  acItems = [];
-  input.focus();
-}
-
-function hideAC(){ ac.classList.remove("show"); acItems = []; }
-
-input.addEventListener("input", ()=> buildSuggestions());
-input.addEventListener("blur", ()=> setTimeout(hideAC, 120));
-
-/**********************
- * Command Execution with pipes + redirection
- **********************/
+/* ---------- Pipes & Redirection ---------- */
 function parseRedirection(cmd){
   const m = cmd.match(/^(.*?)(\s+>>\s+|\s+>\s+)(.+)$/);
   if(!m) return { cmd: cmd.trim(), redir: null };
@@ -1503,58 +1483,107 @@ function parseRedirection(cmd){
   return { cmd: left, redir: { type: op, file } };
 }
 
-function showLabs(){
-  printLine("Labs:", "muted");
-  LABS.forEach(l=>{
-    const done = state.done.has(l.id) ? "✅" : "•";
-    printLine(`  ${done} [${l.tag}] ${l.title}`, "muted");
-  });
+/* ---------- Lab Completion Check ---------- */
+function checkCompletion(){
+  const lab = getCurrentLab();
+  if(!lab) return;
+
+  const ctx = { cwd, did };
+  const already = state.done.has(lab.id);
+
+  if(!already && lab.validate(ctx)){
+    state.done.add(lab.id);
+    state.xp += lab.xp;
+
+    recomputeBadges();
+    updateStatsUI();
+    renderLabList();
+    updateLabDetails();
+
+    printLine("", "muted");
+    printLine(`✅ Lab completed! +${lab.xp} XP`, "ok");
+    if(state.badges.length) printLine("🏅 Badges: " + state.badges.join(", "), "muted");
+
+    if(state.done.size === LABS.length){
+      printLine("🏆 All labs completed! Click 'View Certificate' on top.", "ok");
+    } else {
+      printLine("Pick the next lab from the left.", "muted");
+    }
+  } else {
+    updateStatsUI();
+    updateLabDetails();
+  }
 }
 
-function showStatus(){
-  const l = getLab(currentLabId);
-  printLine(`Active lab: ${l.title}`, "muted");
-  printLine(`Goal: ${l.goal}`, "muted");
-  printLine(`Completed: ${state.done.size}/${LABS.length} • XP: ${state.xp} • Badges: ${state.badges.length}`, "muted");
-}
-function showLesson(){
-  const l = getLab(currentLabId);
-  printLine("Lesson:\n" + l.lesson, "warnText");
-}
-
+/* ---------- Command Runner ---------- */
 function runOne(command, pipedInput=null){
   const parts = command.trim().split(" ").filter(Boolean);
   const base = parts[0] || "";
 
-  // meta
   if(base==="") return {ok:true, out:""};
+
+  // meta
   if(base==="clear"){ out.innerHTML=""; return {ok:true, out:""}; }
   if(base==="help"){ showHelp(); return {ok:true, out:""}; }
   if(base==="labs"){ showLabs(); return {ok:true, out:""}; }
   if(base==="status"){ showStatus(); return {ok:true, out:""}; }
-  if(base==="lesson"){ showLesson(); return {ok:true, out:""}; }
-  if(base==="hint"){ printLine("Hint: " + getLab(currentLabId).hint, "warnText"); return {ok:true, out:""}; }
-  if(base==="solution"){ printLine("Solution:\n" + getLab(currentLabId).solution, "warnText"); return {ok:true, out:""}; }
+  if(base==="hint"){ printLine("Hint: " + getCurrentLab().hint, "warnText"); return {ok:true, out:""}; }
+  if(base==="solution"){ printLine("Solution:\n" + getCurrentLab().solution, "warnText"); return {ok:true, out:""}; }
   if(base==="history"){
     history.slice(-30).forEach((h,i)=> printLine(`${Math.max(0,history.length-30)+i+1}  ${h}`, "muted"));
     return {ok:true, out:""};
   }
 
-  // system info
+  // info
   if(base==="pwd") return {ok:true, out: cwd.replace("/home/imran","~")};
   if(base==="whoami") return {ok:true, out:"imran"};
   if(base==="uname" && parts[1]==="-a") return {ok:true, out:"Linux labs 6.8.0-sim #1 SMP PREEMPT_DYNAMIC x86_64 GNU/Linux"};
-  if(base==="df" && parts[1]==="-h"){ did.dfH = true; return {ok:true, out: sys_df_h()}; }
-  if(base==="df" && parts[1]==="-i"){ did.dfI = true; return {ok:true, out: sys_df_i()}; }
-  if(base==="free" && parts[1]==="-m") return {ok:true, out: sys_free_m()};
-  if(base==="journalctl"){ did.journalFailed = true; return {ok:true, out: sys_journalctl()}; }
-  if(base==="ps"){ did.psDocker = true; return {ok:true, out: sys_ps()}; }
-  if(base==="top"){ did.topDocker = true; return {ok:true, out: sys_top()}; }
+  if(base==="df" && parts[1]==="-h"){
+    // show realistic df
+    return {ok:true, out:
+`Filesystem      Size  Used Avail Use% Mounted on
+/dev/simdisk      50G   47G  2.0G  96% /`};
+  }
+  if(base==="free" && parts[1]==="-m"){
+    return {ok:true, out:
+`              total        used        free      shared  buff/cache   available
+Mem:           8192        1970        4022         210        2200        5900`};
+  }
+  if(base==="ps"){
+    const t =
+` PID TTY      TIME     CMD
+ 101 pts/0    00:00:01 nginx
+ 202 pts/0    00:00:00 sshd
+ 303 pts/0    00:00:02 docker
+ 404 pts/0    00:00:01 python
+ 505 pts/0    00:00:01 node`;
+    did.psDocker = true;
+    return {ok:true, out:t};
+  }
+  if(base==="top"){
+    const t =
+`top - 12:00:00 up 10 days,  2 users,  load average: 0.42, 0.36, 0.31
+%Cpu(s):  7.2 us,  1.1 sy,  0.0 ni, 91.3 id,  0.4 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :   8192.0 total,   4022.0 free,   1970.0 used,   2200.0 buff/cache
+  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+  303 root      20   0  123456  22120   9892 S   3.2   0.3   0:11.2 docker`;
+    did.topDocker = true;
+    return {ok:true, out:t};
+  }
+  if(base==="journalctl"){
+    const t =
+`-- Logs begin at Mon 2025-01-01 00:00:00 IST, end at Tue 2025-01-02 12:00:00 IST. --
+Jan 02 10:20:01 web01 sshd[123]: Failed password for invalid user test
+Jan 02 10:20:05 web01 sshd[123]: Failed password for invalid user root
+Jan 02 10:21:15 web01 sshd[123]: Accepted password for imran`;
+    did.journalFailed = true;
+    return {ok:true, out:t};
+  }
 
-  // file ops
+  // FS
   if(base==="ls"){
     const res = cmd_ls(parts[1]);
-    if(res.ok && cwd==="/home/imran/projects") did.lsInProjects = true;
+    if(cwd==="/home/imran/projects") did.lsInProjects = true;
     return res.ok ? {ok:true, out:res.msg} : {ok:false, out:res.msg};
   }
   if(base==="cd"){
@@ -1566,6 +1595,7 @@ function runOne(command, pipedInput=null){
     if(!parts[1] && pipedInput !== null) return {ok:true, out:pipedInput};
     const res = cmd_cat(parts[1]);
     if(norm(parts[1]||"") === "/etc/hosts") did.catHosts = true;
+    if(norm(parts[1]||"") === "/var/log/auth.log" && (res.msg||"").includes("Failed")) did.grepAuthFailed = did.grepAuthFailed;
     return res.ok ? {ok:true, out:res.msg} : {ok:false, out:res.msg};
   }
   if(base==="head"){
@@ -1576,7 +1606,7 @@ function runOne(command, pipedInput=null){
   if(base==="tail"){
     const n = parts[2] ? parseInt(parts[2],10) : 10;
     const res = cmd_tail(parts[1], isFinite(n)?n:10);
-    if(currentLabId==="l4" && norm(parts[1]||"")==="/home/imran/projects/app.log" && n===3) did.tail3 = true;
+    if(norm(parts[1]||"")==="/home/imran/projects/app.log" && n===3) did.tail3 = true;
     return res.ok ? {ok:true, out:res.msg} : {ok:false, out:res.msg};
   }
   if(base==="wc"){
@@ -1590,6 +1620,7 @@ function runOne(command, pipedInput=null){
     const res = cmd_grep(pattern, file, pipedInput);
     if(/ERROR/i.test(pattern||"") && norm(file||"")==="/home/imran/labs/text/server.log") did.grepError = true;
     if(/Failed/i.test(pattern||"") && norm(file||"")==="/var/log/auth.log") did.grepAuthFailed = true;
+    if(/backup/i.test(pattern||"") && (pipedInput||"").includes("backup")) did.cronPipeGrep = true;
     return res.ok ? {ok:true, out:res.msg} : {ok:false, out:res.msg};
   }
   if(base==="find"){
@@ -1599,7 +1630,7 @@ function runOne(command, pipedInput=null){
   }
   if(base==="chmod"){
     const res = cmd_chmod(parts[1], parts[2]);
-    if(parts[1]==="+x" && norm(parts[2]||"")==="/home/imran/projects/deploy.sh") did.chmodDeploy = true;
+    if(parts[1]==="+x" && norm(parts[2]||"")==="/home/imran/labs/permissions/scripts/clean.sh") did.chmodClean = true;
     return res.ok ? {ok:true, out:""} : {ok:false, out:res.msg};
   }
   if(base==="touch"){
@@ -1613,7 +1644,10 @@ function runOne(command, pipedInput=null){
     return res.ok ? {ok:true, out:""} : {ok:false, out:res.msg};
   }
   if(base==="rm"){
-    const res = removePath(parts[1]);
+    const target = parts[1];
+    const full = norm(target || "");
+    const res = removePath(target);
+    if(full==="/home/imran/projects/bigfile.bin" && res.ok) did.rmBigfile = true;
     return res.ok ? {ok:true, out:""} : {ok:false, out:res.msg};
   }
   if(base==="cp"){
@@ -1631,80 +1665,113 @@ function runOne(command, pipedInput=null){
     return {ok:true, out:text};
   }
 
-  // services / tar / net / cron
+  // du
+  if(base==="du"){
+    // accept: du -sh path
+    if(parts[1] !== "-sh") return {ok:false, out:"du: usage: du -sh <path>"};
+    const res = cmd_du(parts[2] || cwd);
+    if(norm(parts[2]||cwd)==="/home/imran/projects") did.duProjects = true;
+    return res.ok ? {ok:true, out:res.msg} : {ok:false, out:res.msg};
+  }
+
+  // systemctl
   if(base==="systemctl"){
-    if(parts[1]==="list-units"){
-      const res = cmd_systemctl("list-units");
-      return res.ok ? {ok:true, out:res.msg} : {ok:false, out:res.msg};
-    }
     const action = parts[1];
-    const name = parts[2];
-    const res = cmd_systemctl(action, name);
-    if(action==="status" && name && name.startsWith("nginx")) did.systemctlStatus = true;
-    if(action==="restart" && name && name.startsWith("nginx")) did.systemctlRestart = true;
-    return res.ok ? {ok:true, out:res.msg} : {ok:false, out:res.msg};
+    const svc = parts[2];
+    if(!action || !svc) return {ok:false, out:"systemctl: usage: systemctl status|restart <service>"};
+    if(action==="status"){
+      if(svc==="nginx"){
+        did.systemctlStatus = true;
+        return {ok:true, out:
+`● nginx.service - A high performance web server
+   Loaded: loaded (/usr/lib/systemd/system/nginx.service; enabled)
+   Active: ${serviceState.nginx}
+   Docs: man:nginx(8)`};
+      }
+      return {ok:true, out:`● ${svc}.service - (simulated)\n   Active: active (running)`};
+    }
+    if(action==="restart"){
+      if(svc==="nginx"){
+        serviceState.nginx = "active (running)";
+        did.systemctlRestart = true;
+        return {ok:true, out:`Restarted nginx.service (simulated).`};
+      }
+      return {ok:true, out:`Restarted ${svc}.service (simulated).`};
+    }
+    return {ok:false, out:"systemctl: only status|restart supported in this sim"};
   }
-  if(base==="tar"){
-    const res = cmd_tar(parts[1], parts[2], parts[3]);
-    if(parts[1]==="-czf" && norm(parts[2]||"")==="/home/imran/labs/archive/archive.tar.gz") did.tarMade = true;
-    return res.ok ? {ok:true, out:res.msg} : {ok:false, out:res.msg};
+
+  // ss
+  if(base==="ss"){
+    if(parts[1] !== "-tulpen") return {ok:false, out:"ss: try: ss -tulpen"};
+    did.ssPorts = true;
+    return {ok:true, out:
+`Netid  State   Recv-Q Send-Q Local Address:Port  Peer Address:Port Process
+tcp    LISTEN  0      128    0.0.0.0:22         0.0.0.0:*     users:(("sshd",pid=202))
+tcp    LISTEN  0      128    0.0.0.0:80         0.0.0.0:*     users:(("nginx",pid=101))
+tcp    LISTEN  0      128    127.0.0.1:5432     0.0.0.0:*     users:(("postgres",pid=777))`};
   }
+
+  // ip a
+  if(base==="ip"){
+    if(parts[1] !== "a") return {ok:false, out:"ip: try: ip a"};
+    did.ipA = true;
+    return {ok:true, out:
+`1: lo: <LOOPBACK,UP> mtu 65536
+    inet 127.0.0.1/8 scope host lo
+2: eth0: <BROADCAST,MULTICAST,UP> mtu 1500
+    inet 10.0.0.10/24 brd 10.0.0.255 scope global eth0`};
+  }
+
+  // ping
   if(base==="ping"){
-    const res = cmd_ping(parts[1]);
-    if((parts[1]==="web01" || parts[1]==="10.0.0.10") && res.ok) did.pingOk = true;
-    return res.ok ? {ok:true, out:res.msg} : {ok:false, out:res.msg};
+    const host = parts[1];
+    if(!host) return {ok:false, out:"ping: missing host"};
+    if(host==="web01"){
+      did.pingWeb01 = true;
+      return {ok:true, out:
+`PING web01 (10.0.0.10): 56 data bytes
+64 bytes from 10.0.0.10: icmp_seq=1 ttl=64 time=0.7 ms
+64 bytes from 10.0.0.10: icmp_seq=2 ttl=64 time=0.8 ms
+--- web01 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss`};
+    }
+    return {ok:true, out:
+`PING ${host}: 56 data bytes
+Request timeout for icmp_seq 1
+--- ${host} ping statistics ---
+1 packets transmitted, 0 received, 100% packet loss`};
   }
-  if(base==="curl"){
-    const res = cmd_curl(parts[1]);
-    if(parts[1] && parts[1].includes("http") && res.ok) did.curlOk = true;
-    return res.ok ? {ok:true, out:res.msg} : {ok:false, out:res.msg};
+
+  // tar
+  if(base==="tar"){
+    // tar -czf out src
+    if(parts[1] !== "-czf" || !parts[2] || !parts[3]) return {ok:false, out:"tar: usage: tar -czf <out.tar.gz> <src>"};
+    const outFile = parts[2];
+    const src = parts[3];
+    const srcNode = getNode(src);
+    if(!srcNode) return {ok:false, out:`tar: ${src}: No such file or directory`};
+    // create fake archive file
+    writeFile(outFile, `FAKE_TAR_GZ from ${norm(src)}\n`, false);
+    if(norm(outFile)==="/home/imran/labs/fs/archive/projects.tar.gz" && norm(src)==="/home/imran/projects"){
+      did.tarMade = true;
+    }
+    return {ok:true, out:`tar: created ${outFile} (simulated)`};
   }
+
+  // crontab
   if(base==="crontab"){
-    const res = cmd_crontab(parts[1]);
-    return res.ok ? {ok:true, out:res.msg} : {ok:false, out:res.msg};
+    if(parts[1] !== "-l") return {ok:false, out:"crontab: try: crontab -l"};
+    did.cronList = true;
+    const f = ensureFile("~/labs/cron/crontab.txt");
+    return {ok:true, out: f ? f.data : ""};
   }
 
   return {ok:false, out:`${base}: command not found (try 'help')`};
 }
 
-function checkCompletion(){
-  const lab = getLab(currentLabId);
-  if(!lab) return;
-
-  // Pipe lab: detect by user actually typing pipe command
-  // We'll mark did.pipeError when pipeline ran successfully below in runCommand.
-
-  const already = state.done.has(lab.id);
-  if(!already && lab.validate(did)){
-    state.done.add(lab.id);
-    state.xp += lab.xp;
-    recomputeBadges();
-    updateStatsUI();
-    renderLabList();
-    updateLabDetails();
-
-    printLine("", "muted");
-    printLine(`✅ Lab completed! +${lab.xp} XP`, "ok");
-    if(state.badges.length){
-      printLine("🏅 Badges: " + state.badges.join(", "), "muted");
-    }
-
-    // If all done → certificate modal
-    if(state.done.size === LABS.length){
-      printLine("", "muted");
-      printLine("🎉 You completed all labs! Opening Certificate…", "ok");
-      openCertificate();
-    } else {
-      printLine("Choose next lab from the left panel.", "muted");
-    }
-  } else {
-    updateStatsUI();
-    updateLabDetails();
-  }
-}
-
 function runCommand(raw){
-  const inputRaw = (raw||"").trim();
+  const inputRaw = raw.trim();
   if(!inputRaw) return;
 
   promptLine(inputRaw);
@@ -1712,296 +1779,421 @@ function runCommand(raw){
   history.push(inputRaw);
   histIndex = history.length;
 
+  // hide suggestions after submit
+  hideSuggest();
+
   // pipes: a | b | c
   const pipeParts = inputRaw.split("|").map(s=>s.trim()).filter(Boolean);
 
-  // redirection on final segment
+  // redirection only on final command
   const last = pipeParts[pipeParts.length-1] || "";
-  const parsed = parseRedirection(last);
-  pipeParts[pipeParts.length-1] = parsed.cmd;
-  const redir = parsed.redir;
+  const { cmd: lastCmd, redir } = parseRedirection(last);
+  pipeParts[pipeParts.length-1] = lastCmd;
 
   let piped = null;
-  let okAll = true;
 
   for(let i=0;i<pipeParts.length;i++){
     const cmd = pipeParts[i];
     const res = runOne(cmd, piped);
+
     if(!res.ok){
-      okAll = false;
       printLine(res.out, "err");
       piped = null;
       break;
-    } else {
-      piped = res.out;
+    }
+    piped = res.out;
 
-      // print output on final command
-      if(i === pipeParts.length-1){
-        if(piped && piped.trim().length){
-          if(redir){
-            const content = piped + (piped.endsWith("\n") ? "" : "\n");
-            if(redir.type === ">"){
-              writeFile(redir.file, content, false);
-            } else {
-              const existing = ensureFile(redir.file)?.data || "";
-              writeFile(redir.file, existing + content, false);
-            }
-            // Redirection lab markers
-            const f = norm(redir.file);
-            if(f==="/home/imran/labs/redirection/notes.txt"){
-              const now = ensureFile(f)?.data || "";
-              if(now.includes("note1")) did.redirNote1 = true;
-              if(now.includes("note2")) did.redirNote2 = true;
-            }
-            printLine(`(redirected output ${redir.type} ${redir.file})`, "muted");
-          } else {
-            printLine(piped);
-          }
-        } else if(redir){
-          // allow echo style to redirect empty output
-          const content = (piped||"") + "\n";
+    if(i === pipeParts.length-1){
+      if(piped && piped.trim().length){
+        if(redir){
+          const content = piped + (piped.endsWith("\n") ? "" : "\n");
           if(redir.type === ">") writeFile(redir.file, content, false);
           else {
             const existing = ensureFile(redir.file)?.data || "";
             writeFile(redir.file, existing + content, false);
           }
+          const f = norm(redir.file);
+          if(f==="/home/imran/labs/redirection/notes.txt"){
+            const now = ensureFile(f)?.data || "";
+            if(now.includes("note1")) did.redirNote1 = true;
+            if(now.includes("note2")) did.redirNote2 = true;
+          }
           printLine(`(redirected output ${redir.type} ${redir.file})`, "muted");
+        } else {
+          printLine(piped);
         }
+      }
+    }
+
+    // lab14: pipe cat app.log | grep ERROR
+    if(pipeParts.length>=2 && pipeParts[0].startsWith("cat") && pipeParts[1].startsWith("grep")){
+      if(pipeParts[0].includes("app.log") && pipeParts[1].toLowerCase().includes("error")){
+        did.pipeError = true;
       }
     }
   }
 
-  // Pipe detection for lab 15:
-  if(okAll && pipeParts.length>=2){
-    const a = pipeParts[0], b = pipeParts[1];
-    if(a.startsWith("cat") && b.startsWith("grep") && a.includes("app.log") && b.toLowerCase().includes("error")){
-      did.pipeError = true;
-    }
-  }
-
+  // allow echo > file even when final output printed already (handled)
   checkCompletion();
   setPathLabel();
 }
 
-// Reset current lab environment (keep XP/progress)
+/* ---------- Autocomplete (TAB) ---------- */
+function listDirNames(path){
+  const d = ensureDir(path);
+  if(!d) return [];
+  return Object.keys(d.kids).sort();
+}
+function getPathCompletions(token){
+  // token may start with ~ or / or relative with /
+  let base = token;
+  if(base === "~") base = "~/";
+  if(base.startsWith("~/")) base = "/home/imran/" + base.slice(2);
+
+  const hasSlash = base.includes("/");
+  if(!hasSlash){
+    // relative name in cwd
+    const names = listDirNames(cwd);
+    return names.filter(n=>n.startsWith(base)).map(n=>n);
+  }
+
+  // split prefix dir + partial name
+  const full = base.startsWith("/") ? base : (cwd.endsWith("/")?cwd:cwd+"/") + base;
+  const dir = parentPath(full);
+  const partial = baseName(full);
+
+  const names = listDirNames(dir);
+  const matches = names.filter(n=>n.startsWith(partial));
+
+  // return in original format
+  return matches.map(n=>{
+    const candidate = dir.endsWith("/") ? (dir + n) : (dir + "/" + n);
+    // keep ~ for home paths
+    return candidate.replace("/home/imran","~");
+  });
+}
+function getCommandCompletions(token){
+  return COMMANDS.filter(c=>c.startsWith(token));
+}
+function tokenizeForCompletion(text){
+  // simple split while preserving last token
+  const trimmed = text;
+  const lastSpace = trimmed.lastIndexOf(" ");
+  if(lastSpace === -1) return { head:"", token: trimmed, tail:"" };
+  return { head: trimmed.slice(0,lastSpace+1), token: trimmed.slice(lastSpace+1), tail:"" };
+}
+function buildSuggestions(){
+  const v = input.value;
+  const { head, token } = tokenizeForCompletion(v);
+
+  // no token => no suggest
+  if(!token) { hideSuggest(); return; }
+
+  const isFirst = head.trim().length === 0; // first token => command
+  let items = [];
+
+  if(isFirst){
+    const cmds = getCommandCompletions(token).slice(0,8).map(x=>({v:x, d:"command"}));
+    items = cmds;
+  } else {
+    // path suggestions for tokens that look like paths OR when user typed after common commands
+    const paths = getPathCompletions(token).slice(0,8).map(x=>({v:x, d:"path"}));
+    items = paths;
+
+    // also suggest common flags
+    if(["grep","find","du","tar","ss","ip","systemctl"].some(x=>head.includes(x))){
+      const extra = [];
+      if(head.includes("du ")) extra.push({v:"-sh", d:"flag"});
+      if(head.includes("ss ")) extra.push({v:"-tulpen", d:"flag"});
+      if(head.includes("ip ")) extra.push({v:"a", d:"arg"});
+      if(head.includes("systemctl ")) extra.push({v:"status", d:"arg"},{v:"restart", d:"arg"});
+      if(head.includes("tar ")) extra.push({v:"-czf", d:"flag"});
+      items = [...extra, ...items].slice(0,8);
+    }
+  }
+
+  if(!items.length){ hideSuggest(); return; }
+
+  suggestItems = items;
+  suggestIndex = 0;
+  renderSuggest();
+}
+function renderSuggest(){
+  suggestBox.innerHTML = "";
+  suggestItems.forEach((it, idx)=>{
+    const div = document.createElement("div");
+    div.className = "sItem" + (idx===suggestIndex ? " active":"");
+    div.innerHTML = `${it.v}<small>${it.d}</small>`;
+    div.onclick = ()=> applySuggestion(idx);
+    suggestBox.appendChild(div);
+  });
+  suggestBox.classList.add("show");
+}
+function hideSuggest(){
+  suggestItems = [];
+  suggestIndex = -1;
+  suggestBox.classList.remove("show");
+  suggestBox.innerHTML = "";
+}
+function applySuggestion(idx){
+  const it = suggestItems[idx];
+  if(!it) return;
+  const { head, token } = tokenizeForCompletion(input.value);
+
+  // if suggestion is a full path like ~/..., try to only replace token portion
+  input.value = head + it.v;
+  hideSuggest();
+  input.focus();
+}
+function tabComplete(){
+  if(!suggestItems.length){
+    buildSuggestions();
+    return;
+  }
+  applySuggestion(suggestIndex);
+}
+
+/* ---------- Buttons / Actions ---------- */
+startLabBtn.addEventListener("click", ()=>{
+  const l = getCurrentLab();
+  printLine("", "muted");
+  printLine("Starting: " + l.title, "ok");
+  printLine("Goal: " + l.goal, "muted");
+  printLine("Use TAB for autocomplete. Type 'hint' or 'solution' anytime.", "muted");
+  input.focus();
+});
+copySolutionBtn.addEventListener("click", async ()=>{
+  const l = getCurrentLab();
+  try{
+    await navigator.clipboard.writeText(l.solution);
+    printLine("📋 Copied solution to clipboard.", "ok");
+  } catch {
+    printLine("Clipboard blocked by browser. Copy manually from Solution tab.", "warnText");
+  }
+});
+
 function resetCurrentLab(){
   FS = buildFS();
   cwd = "/home/imran";
-  services = { nginx:{active:true}, docker:{active:true}, sshd:{active:true} };
   did = Object.fromEntries(Object.keys(did).map(k=>[k,false]));
   out.innerHTML = "";
   boot(true);
+  printLine("Lab environment reset.", "warnText");
 }
 resetLabBtn.addEventListener("click", resetCurrentLab);
 
 wipeProgressBtn.addEventListener("click", ()=>{
-  if(!confirm("This wipes completed labs, XP, and badges. Continue?")) return;
+  if(!confirm("This will wipe XP, badges, and completed labs. Continue?")) return;
   localStorage.removeItem(STORE_KEY);
   state = { done:new Set(), xp:0, badges:[], lastLab:null };
   currentLabId = LABS[0].id;
   resetCurrentLab();
 });
 
-// Run button
+/* ---------- Input events ---------- */
 runBtn.addEventListener("click", ()=>{
   const v = input.value;
   input.value = "";
-  hideAC();
   runCommand(v);
   input.focus();
 });
-
-// Keyboard: Enter / history / Tab completion / AC navigation
+input.addEventListener("input", ()=>{
+  buildSuggestions();
+});
 input.addEventListener("keydown", (e)=>{
   if(e.key === "Enter"){
     e.preventDefault();
     runBtn.click();
-  } else if(e.key === "ArrowUp"){
-    e.preventDefault();
-    if(history.length){
-      histIndex = Math.max(0, histIndex-1);
-      input.value = history[histIndex] || "";
-      buildSuggestions();
-    }
-  } else if(e.key === "ArrowDown"){
-    e.preventDefault();
-    if(history.length){
-      histIndex = Math.min(history.length, histIndex+1);
-      input.value = history[histIndex] || "";
-      buildSuggestions();
-    }
   } else if(e.key === "Tab"){
     e.preventDefault();
-    if(!ac.classList.contains("show")) buildSuggestions();
-    if(acItems.length) applyCompletion();
+    tabComplete();
+  } else if(e.key === "ArrowUp"){
+    // history if suggestions hidden
+    if(suggestItems.length){
+      e.preventDefault();
+      suggestIndex = Math.max(0, suggestIndex-1);
+      renderSuggest();
+    } else {
+      e.preventDefault();
+      if(history.length){
+        histIndex = Math.max(0, histIndex-1);
+        input.value = history[histIndex] || "";
+      }
+    }
+  } else if(e.key === "ArrowDown"){
+    if(suggestItems.length){
+      e.preventDefault();
+      suggestIndex = Math.min(suggestItems.length-1, suggestIndex+1);
+      renderSuggest();
+    } else {
+      e.preventDefault();
+      if(history.length){
+        histIndex = Math.min(history.length, histIndex+1);
+        input.value = history[histIndex] || "";
+      }
+    }
   } else if(e.key === "Escape"){
-    hideAC();
-  } else if(e.key === "ArrowLeft" || e.key === "ArrowRight"){
-    // don't spam suggestions
-  } else if(e.key === "ArrowUp" && ac.classList.contains("show")){
-    e.preventDefault();
-    acIndex = Math.max(0, acIndex-1); renderAC();
-  } else if(e.key === "ArrowDown" && ac.classList.contains("show")){
-    e.preventDefault();
-    acIndex = Math.min(acItems.length-1, acIndex+1); renderAC();
+    hideSuggest();
   }
 });
+document.addEventListener("click", (e)=>{
+  if(!suggestBox.contains(e.target) && e.target !== input) hideSuggest();
+});
 
+// Search
 search.addEventListener("input", ()=> renderLabList());
 
-/**********************
- * Certificate
- **********************/
-function openCertificate(){
+/* ---------- Completion hooks ---------- */
+// extra markers
+function completionHooks(cmd){
+  // grep Failed /var/log/auth.log
+  // handled in cmd_grep
+}
+
+/* ---------- Certificate ---------- */
+function renderCertificate(name){
+  const ctx = certCanvas.getContext("2d");
+
+  const W = certCanvas.width;
+  const H = certCanvas.height;
+
+  // background
+  const bg = ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0, "rgba(110,231,255,0.18)");
+  bg.addColorStop(0.5, "rgba(167,139,250,0.14)");
+  bg.addColorStop(1, "rgba(46,229,157,0.12)");
+  ctx.fillStyle = "rgba(10,14,24,1)";
+  ctx.fillRect(0,0,W,H);
+  ctx.fillStyle = bg;
+  ctx.fillRect(0,0,W,H);
+
+  // border
+  ctx.lineWidth = 18;
+  const br = ctx.createLinearGradient(0,0,W,0);
+  br.addColorStop(0, "rgba(110,231,255,0.9)");
+  br.addColorStop(0.5, "rgba(167,139,250,0.9)");
+  br.addColorStop(1, "rgba(46,229,157,0.9)");
+  ctx.strokeStyle = br;
+  ctx.strokeRect(40,40,W-80,H-80);
+
+  // inner panel
+  ctx.fillStyle = "rgba(0,0,0,0.30)";
+  roundRect(ctx, 90, 90, W-180, H-180, 28, true, false);
+
+  // text
+  ctx.fillStyle = "rgba(255,255,255,0.95)";
+  ctx.textAlign = "center";
+
+  ctx.font = "900 58px ui-sans-serif, system-ui, Segoe UI";
+  ctx.fillText("Certificate of Completion", W/2, 210);
+
+  ctx.font = "800 26px ui-sans-serif, system-ui, Segoe UI";
+  ctx.fillStyle = "rgba(255,255,255,0.78)";
+  ctx.fillText("This certificate is proudly presented to", W/2, 270);
+
+  ctx.font = "950 78px ui-sans-serif, system-ui, Segoe UI";
+  ctx.fillStyle = "rgba(255,255,255,0.96)";
+  ctx.fillText(name || "Learner", W/2, 380);
+
+  ctx.font = "800 24px ui-sans-serif, system-ui, Segoe UI";
+  ctx.fillStyle = "rgba(255,255,255,0.78)";
+  ctx.fillText("for successfully completing the Linux Practice Labs (Learning Mode)", W/2, 450);
+
+  ctx.font = "800 22px ui-sans-serif, system-ui, Segoe UI";
+  ctx.fillStyle = "rgba(255,255,255,0.68)";
+  ctx.fillText(`XP Earned: ${state.xp}   •   Labs Completed: ${LABS.length}/${LABS.length}`, W/2, 510);
+
+  // badges
+  ctx.fillStyle = "rgba(255,255,255,0.80)";
+  ctx.font = "850 20px ui-sans-serif, system-ui";
+  const badgeLine = (state.badges.slice(0,6).join(" • ") || "Linux Hero");
+  ctx.fillText(`Badges: ${badgeLine}`, W/2, 560);
+
+  // signature line
+  ctx.strokeStyle = "rgba(255,255,255,0.25)";
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(W/2 - 260, 680); ctx.lineTo(W/2 + 260, 680); ctx.stroke();
+
+  ctx.fillStyle = "rgba(255,255,255,0.78)";
+  ctx.font = "900 24px ui-sans-serif, system-ui";
+  ctx.fillText("Imran Ali", W/2, 720);
+
+  ctx.fillStyle = "rgba(255,255,255,0.62)";
+  ctx.font = "800 18px ui-sans-serif, system-ui";
+  ctx.fillText("Linux Administrator • DevOps Enthusiast", W/2, 750);
+
+  // date
+  const dt = new Date();
+  ctx.fillStyle = "rgba(255,255,255,0.55)";
+  ctx.font = "800 16px ui-sans-serif, system-ui";
+  ctx.fillText(`Issued: ${dt.toDateString()}`, W/2, 810);
+}
+function roundRect(ctx, x, y, w, h, r, fill, stroke) {
+  if (typeof r === 'number') r = {tl:r, tr:r, br:r, bl:r};
+  ctx.beginPath();
+  ctx.moveTo(x + r.tl, y);
+  ctx.lineTo(x + w - r.tr, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r.tr);
+  ctx.lineTo(x + w, y + h - r.br);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r.br, y + h);
+  ctx.lineTo(x + r.bl, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r.bl);
+  ctx.lineTo(x, y + r.tl);
+  ctx.quadraticCurveTo(x, y, x + r.tl, y);
+  ctx.closePath();
+  if (fill) ctx.fill();
+  if (stroke) ctx.stroke();
+}
+
+certBtn.addEventListener("click", ()=>{
   certOverlay.classList.add("show");
-  certName.value = (certName.value || "Linux Learner");
-  renderCertificate();
-}
-function closeCertificate(){
-  certOverlay.classList.remove("show");
-}
-closeCertBtn.addEventListener("click", closeCertificate);
-certOverlay.addEventListener("click", (e)=>{ if(e.target === certOverlay) closeCertificate(); });
-renderCertBtn.addEventListener("click", renderCertificate);
+  if(!certName.value) certName.value = "Learner";
+  renderCertificate(certName.value);
+});
+closeCertBtn.addEventListener("click", ()=> certOverlay.classList.remove("show"));
+certOverlay.addEventListener("click", (e)=>{
+  if(e.target === certOverlay) certOverlay.classList.remove("show");
+});
+renderCertBtn.addEventListener("click", ()=> renderCertificate(certName.value));
 downloadCertBtn.addEventListener("click", ()=>{
   const a = document.createElement("a");
-  a.download = "Linux-Labs-Certificate.png";
+  a.download = "linux-labs-certificate.png";
   a.href = certCanvas.toDataURL("image/png");
   a.click();
 });
 
-function renderCertificate(){
-  const name = (certName.value || "Linux Learner").trim().slice(0,40);
-  const xp = state.xp;
-  const badges = state.badges.slice(0, 8).join(" • ");
-  const date = new Date().toLocaleDateString(undefined, {year:"numeric", month:"short", day:"2-digit"});
-
-  // Background
-  ctx.clearRect(0,0,certCanvas.width, certCanvas.height);
-
-  // gradient bg
-  const g = ctx.createLinearGradient(0,0,certCanvas.width, certCanvas.height);
-  g.addColorStop(0, "#0b1020");
-  g.addColorStop(1, "#070a10");
-  ctx.fillStyle = g;
-  ctx.fillRect(0,0,certCanvas.width, certCanvas.height);
-
-  // glow blobs
-  function blob(x,y,r,color){
-    const rg = ctx.createRadialGradient(x,y,0,x,y,r);
-    rg.addColorStop(0, color);
-    rg.addColorStop(1, "rgba(0,0,0,0)");
-    ctx.fillStyle = rg;
-    ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
-  }
-  blob(320,220,280,"rgba(110,231,255,.25)");
-  blob(1220,260,320,"rgba(167,139,250,.22)");
-  blob(900,820,380,"rgba(46,229,157,.14)");
-
-  // border card
-  ctx.fillStyle = "rgba(255,255,255,.06)";
-  roundRect(ctx, 120, 120, 1360, 760, 26, true, false);
-  ctx.strokeStyle = "rgba(255,255,255,.14)";
-  ctx.lineWidth = 2;
-  roundRect(ctx, 120, 120, 1360, 760, 26, false, true);
-
-  // title
-  ctx.fillStyle = "rgba(255,255,255,.92)";
-  ctx.font = "900 54px ui-sans-serif, system-ui, Segoe UI, Arial";
-  ctx.fillText("Certificate of Completion", 220, 250);
-
-  ctx.fillStyle = "rgba(255,255,255,.68)";
-  ctx.font = "800 20px ui-sans-serif, system-ui, Segoe UI, Arial";
-  ctx.fillText("Awarded for completing all Linux Practice Labs (Learning Mode+)", 220, 290);
-
-  // Name
-  ctx.fillStyle = "rgba(110,231,255,.95)";
-  ctx.font = "900 64px ui-sans-serif, system-ui, Segoe UI, Arial";
-  ctx.fillText(name, 220, 410);
-
-  // Details
-  ctx.fillStyle = "rgba(255,255,255,.78)";
-  ctx.font = "850 22px ui-sans-serif, system-ui, Segoe UI, Arial";
-  ctx.fillText(`Total XP: ${xp}`, 220, 470);
-  ctx.fillText(`Date: ${date}`, 220, 505);
-
-  ctx.fillStyle = "rgba(255,255,255,.62)";
-  ctx.font = "800 18px ui-sans-serif, system-ui, Segoe UI, Arial";
-  ctx.fillText(`Badges: ${badges || "—"}`, 220, 545);
-
-  // Signature
-  ctx.fillStyle = "rgba(255,255,255,.85)";
-  ctx.font = "900 22px ui-sans-serif, system-ui, Segoe UI, Arial";
-  ctx.fillText("Imran Ali", 1080, 740);
-  ctx.fillStyle = "rgba(255,255,255,.60)";
-  ctx.font = "800 16px ui-sans-serif, system-ui, Segoe UI, Arial";
-  ctx.fillText("Linux Administrator • DevOps Enthusiast", 1080, 765);
-
-  // seal
-  drawSeal(1220, 410);
-}
-
-function roundRect(ctx, x, y, w, h, r, fill, stroke) {
-  const rr = Math.min(r, w/2, h/2);
-  ctx.beginPath();
-  ctx.moveTo(x+rr, y);
-  ctx.arcTo(x+w, y, x+w, y+h, rr);
-  ctx.arcTo(x+w, y+h, x, y+h, rr);
-  ctx.arcTo(x, y+h, x, y, rr);
-  ctx.arcTo(x, y, x+w, y, rr);
-  ctx.closePath();
-  if(fill) ctx.fill();
-  if(stroke) ctx.stroke();
-}
-function drawSeal(cx, cy){
-  // outer ring
-  ctx.save();
-  ctx.globalAlpha = 1;
-  const rg = ctx.createRadialGradient(cx,cy,10,cx,cy,90);
-  rg.addColorStop(0, "rgba(110,231,255,.35)");
-  rg.addColorStop(1, "rgba(167,139,250,.20)");
-  ctx.fillStyle = rg;
-  ctx.beginPath(); ctx.arc(cx,cy,92,0,Math.PI*2); ctx.fill();
-
-  ctx.strokeStyle = "rgba(255,255,255,.18)";
-  ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.arc(cx,cy,92,0,Math.PI*2); ctx.stroke();
-  ctx.beginPath(); ctx.arc(cx,cy,72,0,Math.PI*2); ctx.stroke();
-
-  // star
-  ctx.fillStyle = "rgba(255,255,255,.90)";
-  ctx.font = "900 36px ui-sans-serif, system-ui";
-  ctx.fillText("★", cx-12, cy+12);
-
-  ctx.fillStyle = "rgba(255,255,255,.75)";
-  ctx.font = "900 14px ui-sans-serif, system-ui";
-  ctx.fillText("LINUX", cx-22, cy+52);
-  ctx.restore();
-}
-
-/**********************
- * Boot
- **********************/
+/* ---------- Boot ---------- */
 function boot(showIntro){
   renderFilters();
-  recomputeBadges();
   updateStatsUI();
   renderLabList();
   selectLab(currentLabId, false);
   setPathLabel();
 
   if(showIntro){
-    printLine("Welcome to Linux Practice Labs — Learning Mode+ ✅", "ok");
-    printLine("Use Lesson Mode + Autocomplete to learn faster.", "muted");
-    printLine("Commands: help | labs | status | lesson | hint | solution", "muted");
-    printLine("Press Tab for autocomplete. Use pipes and redirection too.", "muted");
+    printLine("Welcome to Linux Practice Labs — Learning Mode ✅", "ok");
+    printLine("Lesson → Hint → Solution tabs on left. Practice in the terminal.", "muted");
+    printLine("TAB autocomplete works for commands and paths.", "muted");
+    printLine("Try: cd ~/projects  then: ls", "muted");
+  }
+}
+function selectLab(id, announce=false){
+  currentLabId = id;
+  state.lastLab = id;
+  saveStore({ done:[...state.done], xp:state.xp, badges:state.badges, lastLab: id });
+  renderLabList();
+  updateLabDetails();
+  setPathLabel();
+  updateStatsUI();
+
+  if(announce){
     printLine("", "muted");
-    const l = getLab(currentLabId);
-    printLine("Current: " + l.title, "ok");
-    printLine("Goal: " + l.goal, "muted");
+    printLine("Switched lab → " + getCurrentLab().title, "ok");
+    printLine("Goal: " + getCurrentLab().goal, "muted");
   }
 }
 
+// Start
 boot(true);
 </script>
 </body>
