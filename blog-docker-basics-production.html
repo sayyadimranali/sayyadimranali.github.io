@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Docker Basics That Actually Matter in Production | Imran Ali</title>
+  <meta name="description" content="Docker basics that actually matter in production: images, containers, networking, volumes, security, logging, and common operational mistakes." />
+
+  <style>
+    :root{
+      --bg:#070A10;
+      --panel: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.14);
+      --text: rgba(255,255,255,.90);
+      --muted: rgba(255,255,255,.62);
+      --accent:#6EE7FF;
+      --accent2:#A78BFA;
+      --good:#2ee59d;
+      --warn:#ffcc66;
+      --bad:#ff6b6b;
+      --radius: 18px;
+      --shadow: 0 18px 55px rgba(0,0,0,.52);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 800px at 15% 10%, rgba(167,139,250,.20), transparent 55%),
+        radial-gradient(900px 600px at 85% 20%, rgba(110,231,255,.18), transparent 52%),
+        radial-gradient(900px 700px at 55% 90%, rgba(46,229,157,.12), transparent 55%),
+        linear-gradient(180deg, var(--bg), #0b1220 65%, rgba(0,0,0,.65));
+      overflow-x:hidden;
+    }
+    a{color:var(--accent); text-decoration:none; font-weight:900}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:1180px;margin:0 auto;padding:18px 18px 80px}
+
+    /* Top nav */
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      margin: 10px 0 16px;
+    }
+    .brand{display:flex; align-items:center; gap:10px}
+    .logo{
+      width:40px;height:40px;border-radius:16px;
+      background: radial-gradient(circle at 30% 30%, rgba(110,231,255,.95), rgba(167,139,250,.70), rgba(46,229,157,.35));
+      border:1px solid var(--border);
+      box-shadow: 0 12px 35px rgba(110,231,255,.15);
+    }
+    .brand b{display:block; letter-spacing:.2px}
+    .brand small{display:block;color:var(--muted); margin-top:2px}
+
+    .btn{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-weight: 950;
+      cursor:pointer;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+      display:inline-flex; align-items:center; gap:8px;
+      user-select:none;
+      text-decoration:none;
+    }
+    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.10); border-color: rgba(110,231,255,.22); text-decoration:none}
+    .btn.primary{
+      border-color: rgba(110,231,255,.35);
+      background: linear-gradient(135deg, rgba(110,231,255,.16), rgba(167,139,250,.12));
+    }
+
+    /* Progress bar */
+    .progress{
+      position:fixed; top:0; left:0; right:0; height:4px;
+      background: rgba(255,255,255,.08);
+      z-index:9999;
+    }
+    .progress > div{
+      height:100%; width:0%;
+      background: linear-gradient(90deg, rgba(110,231,255,.9), rgba(167,139,250,.85), rgba(46,229,157,.8));
+    }
+
+    /* Layout */
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 320px;
+      gap:14px;
+      align-items:start;
+    }
+    @media (max-width: 1050px){
+      .grid{grid-template-columns:1fr}
+      .sticky{position:relative !important; top:auto !important}
+    }
+
+    .card{
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .hd{
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: linear-gradient(135deg, rgba(110,231,255,.12), rgba(167,139,250,.10));
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    .hd h2{margin:0;font-size:14px;letter-spacing:.2px}
+    .bd{padding:16px}
+
+    .hero h1{
+      margin: 2px 0 8px;
+      font-size: 34px;
+      letter-spacing:.2px;
+      line-height:1.2;
+    }
+    .meta{
+      display:flex; flex-wrap:wrap; gap:8px;
+      color: var(--muted);
+      font-weight: 850;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+    .pill{
+      font-size: 11px;
+      font-weight: 950;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      color: rgba(255,255,255,.84);
+      white-space:nowrap;
+    }
+    .pill.good{border-color: rgba(46,229,157,.35); background: rgba(46,229,157,.08)}
+    .pill.warn{border-color: rgba(255,204,102,.35); background: rgba(255,204,102,.08)}
+
+    .content{
+      color: rgba(255,255,255,.84);
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    .content h2{
+      margin: 26px 0 10px;
+      font-size: 18px;
+      color: rgba(255,255,255,.94);
+    }
+    .content h3{
+      margin: 18px 0 8px;
+      font-size: 16px;
+      color: rgba(255,255,255,.92);
+    }
+    .content ul{margin:8px 0 14px; padding-left: 18px}
+    .content li{margin:6px 0}
+
+    .callout{
+      margin: 14px 0;
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+    }
+    .warnBox{border-color: rgba(255,204,102,.30); background: rgba(255,204,102,.08)}
+    .goodBox{border-color: rgba(46,229,157,.30); background: rgba(46,229,157,.08)}
+
+    pre{
+      margin: 12px 0;
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.35);
+      overflow:auto;
+      position: relative;
+    }
+    code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      color: rgba(255,255,255,.86);
+    }
+    .copyBtn{
+      position:absolute;
+      top:10px; right:10px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.88);
+      cursor:pointer;
+      font-weight: 950;
+      font-size: 12px;
+    }
+
+    .sticky{position:sticky; top:14px}
+    .toc a{
+      display:block;
+      padding: 9px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      margin: 8px 0;
+      color: rgba(255,255,255,.82);
+      font-weight: 900;
+    }
+    .toc a.active{
+      border-color: rgba(110,231,255,.40);
+      background: rgba(110,231,255,.08);
+    }
+
+    footer{
+      margin-top: 18px;
+      text-align:center;
+      color: var(--muted);
+      font-weight: 850;
+      font-size: 12px;
+    }
+    html{scroll-behavior:smooth}
+  </style>
+</head>
+<body>
+
+<div class="progress"><div id="pbar"></div></div>
+
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo"></div>
+      <div>
+        <b>Imran Ali • Blog</b>
+        <small>Real-world Docker & Linux operations</small>
+      </div>
+    </div>
+    <div style="display:flex; gap:10px">
+      <a class="btn" href="index.html">⬅ Back</a>
+      <a class="btn primary" href="linux-labs.html">🧪 Practice Labs</a>
+    </div>
+  </div>
+
+  <div class="grid">
+    <!-- Article -->
+    <article class="card">
+      <div class="hd">
+        <h2>Article</h2>
+        <div style="display:flex; gap:8px">
+          <span class="pill good">Docker</span>
+          <span class="pill warn">Production</span>
+          <span class="pill">~8 min read</span>
+        </div>
+      </div>
+
+      <div class="bd hero">
+        <h1>Docker Basics That Actually Matter in Production</h1>
+        <div class="meta">
+          <span>By <b>Imran Ali</b></span>
+          <span>•</span>
+          <span id="today"></span>
+        </div>
+
+        <div class="content">
+          <div class="callout warnBox">
+            <b>Reality check:</b> Docker commands are easy. Running Docker reliably in production is not.
+            This guide focuses only on what truly matters in real environments.
+          </div>
+
+          <h2 id="images">1) Images: small, predictable, reproducible</h2>
+          <ul>
+            <li>Always pin versions (avoid <code>:latest</code>)</li>
+            <li>Use minimal base images (alpine/distroless when possible)</li>
+            <li>One process per container</li>
+          </ul>
+
+          <pre><button class="copyBtn">Copy</button><code>FROM nginx:1.25-alpine
+COPY nginx.conf /etc/nginx/nginx.conf</code></pre>
+
+          <h2 id="containers">2) Containers are disposable</h2>
+          <p>
+            If restarting a container causes data loss, your design is wrong.
+            Containers should be replaceable at any time.
+          </p>
+
+          <div class="callout goodBox">
+            <b>Golden rule:</b> Never store important data inside the container filesystem.
+          </div>
+
+          <h2 id="volumes">3) Volumes: data lives outside containers</h2>
+          <pre><button class="copyBtn">Copy</button><code>docker run -d \
+  -v /data/mysql:/var/lib/mysql \
+  mysql:8.0</code></pre>
+
+          <h2 id="networking">4) Networking: explicit is better</h2>
+          <ul>
+            <li>Avoid using the default bridge blindly</li>
+            <li>Create user-defined networks</li>
+            <li>Expose only required ports</li>
+          </ul>
+
+          <pre><button class="copyBtn">Copy</button><code>docker network create app-net
+docker run -d --network app-net --name web nginx</code></pre>
+
+          <h2 id="logging">5) Logging: stdout is king</h2>
+          <p>
+            Applications should log to <b>stdout/stderr</b>.
+            Docker handles log collection; external tools handle storage.
+          </p>
+
+          <pre><button class="copyBtn">Copy</button><code>docker logs web
+docker logs -f web</code></pre>
+
+          <h2 id="resources">6) Resource limits prevent outages</h2>
+          <pre><button class="copyBtn">Copy</button><code>docker run -d \
+  --memory="512m" \
+  --cpus="1.0" \
+  myapp:1.0</code></pre>
+
+          <div class="callout warnBox">
+            <b>Production failure pattern:</b> One noisy container consumes all RAM and kills the host.
+          </div>
+
+          <h2 id="security">7) Basic security that people ignore</h2>
+          <ul>
+            <li>Never run containers as root if avoidable</li>
+            <li>Scan images for vulnerabilities</li>
+            <li>Use read-only filesystems</li>
+          </ul>
+
+          <pre><button class="copyBtn">Copy</button><code>docker run -d \
+  --read-only \
+  --cap-drop ALL \
+  myapp:1.0</code></pre>
+
+          <h2 id="compose">8) Docker Compose for sanity</h2>
+          <pre><button class="copyBtn">Copy</button><code>version: "3.9"
+services:
+  web:
+    image: nginx:1.25-alpine
+    ports:
+      - "80:80"
+    restart: always</code></pre>
+
+          <h2 id="mistakes">9) Common production mistakes</h2>
+          <ul>
+            <li>Using <code>:latest</code></li>
+            <li>No restart policy</li>
+            <li>No health checks</li>
+            <li>No monitoring on the host</li>
+          </ul>
+
+          <div class="callout goodBox">
+            <b>Final advice:</b> Docker simplifies deployment, not operations.
+            Treat containers like cattle, not pets.
+          </div>
+
+          <p class="small">
+            Tip: Pair this blog with your <b>Linux Practice Labs</b> to demonstrate hands-on skills.
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <!-- TOC -->
+    <aside class="card sticky">
+      <div class="hd"><h2>Contents</h2></div>
+      <div class="bd toc">
+        <a href="#images">Images</a>
+        <a href="#containers">Containers</a>
+        <a href="#volumes">Volumes</a>
+        <a href="#networking">Networking</a>
+        <a href="#logging">Logging</a>
+        <a href="#resources">Resources</a>
+        <a href="#security">Security</a>
+        <a href="#compose">Compose</a>
+        <a href="#mistakes">Mistakes</a>
+      </div>
+    </aside>
+  </div>
+
+  <footer>
+    © 2025 Imran Ali • Docker done right 🐳
+  </footer>
+</div>
+
+<script>
+  document.getElementById("today").textContent =
+    new Date().toLocaleDateString(undefined, { year:"numeric", month:"short", day:"2-digit" });
+
+  const pbar = document.getElementById("pbar");
+  window.addEventListener("scroll", ()=>{
+    const h = document.documentElement;
+    const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    pbar.style.width = pct + "%";
+  });
+
+  document.querySelectorAll(".copyBtn").forEach(btn=>{
+    btn.onclick = async ()=>{
+      const code = btn.parentElement.querySelector("code").innerText;
+      await navigator.clipboard.writeText(code);
+      btn.textContent = "Copied";
+      setTimeout(()=>btn.textContent="Copy",1000);
+    };
+  });
+</script>
+</body>
+</html>
